@@ -27,17 +27,16 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	right.speed = 0.1f;
 	
 	// move left
-	/*SDL_RenderCopyEx(App->renderer->renderer,
-		graphics,
-		&a,
-		&b,
-		NULL,
-		NULL,
-		SDL_FLIP_HORIZONTAL);*/
-	left.frames.push_back({33, 1, 32, 14});
-	left.frames.push_back({0, 1, 32, 14});
-	left.loop = false;
+	left = right;
+	left.loop = true;
 	left.speed = 0.1f;
+
+	// attack1
+	attack1.frames.push_back({ 12, 440, 45,85 });
+	attack1.frames.push_back({ 66, 440, 62,85 });
+	attack1.frames.push_back({ 12, 440, 45,85 });
+	attack1.loop = false;
+	attack1.speed = 0.2f;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -78,57 +77,96 @@ update_status ModulePlayer::Update()
 	{
 		App->scene_platform->playTrainAnim = true;
 	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	{
+		attack1.Reset();
+		currentAnimation = &attack1;
+		blockAnimations = true;
+	}
+
+	if (blockAnimations) {
+		if (attackDelay <= 0) {
+			blockAnimations = false;
+			attackDelay = 20;
+		}
+		attackDelay--;
+	}
+	
+	if (!blockAnimations) {
+		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+		{
+			position.x -= speed;
+			direction = false;
+			if (currentAnimation != &left)
+			{
+				left.Reset();
+				currentAnimation = &left;
+				lastMovementAnimation = currentAnimation;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+		{
+			position.x += speed;
+			direction = true;
+			if (currentAnimation != &right)
+			{
+				right.Reset();
+				currentAnimation = &right;
+				lastMovementAnimation = currentAnimation;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+		{
+			position.y += speed;
+			if (lastMovementAnimation != nullptr) {
+				currentAnimation = lastMovementAnimation;
+			}
+			else {
+				right.Reset();
+				currentAnimation = &right;
+				lastMovementAnimation = currentAnimation;
+			}
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		{
+			position.y -= speed;
+			if (lastMovementAnimation != nullptr) {
+				currentAnimation = lastMovementAnimation;
+			}
+			else {
+				right.Reset();
+				currentAnimation = &right;
+				lastMovementAnimation = currentAnimation;
+			}
+		}
+
+
+		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		{
+			//App->particles->AddParticle(App->particles->laser, position.x, position.y);
+		}
+	}
 	
 
-	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-	{
-		direction = false;
-		position.x -= speed;
-		if (current_animation != &left)
-		{
-			left.Reset();
-			current_animation = &left;
-		}
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-	{
-		position.x += speed;
-		direction = true;
-		if (current_animation != &right)
-		{
-			right.Reset();
-			current_animation = &right;
-		}
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-	{
-		position.y += speed;
-		
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-	{
-		position.y -= speed;
-		
-	}
-
-	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		//App->particles->AddParticle(App->particles->laser, position.x, position.y);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
+	if ((App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE) {
-		current_animation = &idle;
+		&& App->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
+		&& App->input->GetKey(SDL_SCANCODE_F) == KEY_IDLE)
+		|| (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT
+			&& App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+			|| (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT
+				&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
+		currentAnimation = &idle;
 	}
 
 	// Draw everything --------------------------------------
 	if (destroyed == false) {
-		App->renderer->Blit(graphics, position.x, position.y + App->scene_platform->tremorOffset/2, &(current_animation->GetCurrentFrame()));
+		App->renderer->Blit(graphics, position.x, position.y + App->scene_platform->tremorOffset/2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
 		collider->SetPos(position.x, position.y);
 	}
 	else {

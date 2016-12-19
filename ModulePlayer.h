@@ -22,15 +22,21 @@ public:
 public:
 
 	SDL_Texture* graphics = nullptr;
-	Animation* current_animation = nullptr;
+	Animation* currentAnimation = nullptr;
+	Animation* lastMovementAnimation = nullptr;
 	Collider* collider;
 	Animation idle;
 	Animation right;
 	Animation left;
+	Animation attack1;
+	bool blockAnimations = false;
 	iPoint position;
-	int weaponOffset;
 	bool destroyed = false;
 	bool direction = true; // true = right, false = left
+	int weaponOffset;
+
+private: 
+	int attackDelay = 20;
 };
 
 #endif
