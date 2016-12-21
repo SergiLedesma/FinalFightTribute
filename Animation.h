@@ -3,17 +3,22 @@
 
 using namespace std;
 
+struct FramePair {
+	SDL_Rect frame;		// Sprite's x,y,w,h
+	int offset;			// Distance from elements's x centre to frame's x center. (In character it's distance from hip to frame's x middle value.)
+	//FramePair() : frame({ 0,0,0,0 }), offset(0) {};
+};
+
 class Animation
 {
 public:
 	bool loop = true;
 	float speed = 1.0f;
-	vector<SDL_Rect> frames;
-
+	vector<FramePair> frames;
 private:
 	float current_frame = 0.0f;
 	int loops = 0;
-
+	
 public:
 	Animation()
 	{}
@@ -21,7 +26,7 @@ public:
 	Animation(const Animation& anim) : loop(anim.loop), speed(anim.speed), frames(anim.frames)
 	{}
 
-	SDL_Rect& GetCurrentFrame()
+	FramePair& GetCurrentFrame()
 	{
 		float last_frame = (float) frames.size();
 

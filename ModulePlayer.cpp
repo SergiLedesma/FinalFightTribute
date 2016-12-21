@@ -14,15 +14,17 @@
 ModulePlayer::ModulePlayer(bool active) : Module(active)
 {
 	// idle animation
-	idle.frames.push_back({7, 7, 37, 88});
+	idle.frames.push_back({ {7, 7, 37, 88}, 0 });
+	attack1.loop = false;
+	idle.speed = 0.2f;
 
 	// move right
-	right.frames.push_back({ 14, 102, 24, 87 });
-	right.frames.push_back({ 53, 101, 45, 87 });
-	right.frames.push_back({ 114, 101, 37, 87 });
-	right.frames.push_back({ 164, 100, 26, 88 });
-	right.frames.push_back({ 213, 101, 45, 87 });
-	right.frames.push_back({ 267, 101, 36, 86 });
+	right.frames.push_back({{ 14, 102, 24, 87 }, 0 });
+	right.frames.push_back({{ 53, 101, 45, 87 }, 0 });
+	right.frames.push_back({{ 114, 101, 37, 87 }, 0 });
+	right.frames.push_back({{ 164, 100, 26, 88 }, 0 });
+	right.frames.push_back({{ 213, 101, 45, 87 }, 0 });
+	right.frames.push_back({{ 267, 101, 36, 86 }, 0 });
 	right.loop = true;
 	right.speed = 0.1f;
 	
@@ -32,9 +34,9 @@ ModulePlayer::ModulePlayer(bool active) : Module(active)
 	left.speed = 0.1f;
 
 	// attack1
-	attack1.frames.push_back({ 12, 440, 45,85 });
-	attack1.frames.push_back({ 66, 440, 62,85 });
-	attack1.frames.push_back({ 12, 440, 45,85 });
+	attack1.frames.push_back({{ 12, 440, 45, 85 }, 5 });
+	attack1.frames.push_back({{ 66, 440, 62, 85 }, 14 });
+	attack1.frames.push_back({{ 12, 440, 45, 85 }, 5 });
 	attack1.loop = false;
 	attack1.speed = 0.2f;
 }
@@ -166,7 +168,7 @@ update_status ModulePlayer::Update()
 
 	// Draw everything --------------------------------------
 	if (destroyed == false) {
-		App->renderer->Blit(graphics, position.x, position.y + App->scene_platform->tremorOffset/2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
+		App->renderer->BlitDynamic(graphics, position.x, position.y + App->scene_platform->tremorOffset/2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
 		collider->SetPos(position.x, position.y);
 	}
 	else {

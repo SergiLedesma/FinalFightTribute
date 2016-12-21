@@ -55,7 +55,7 @@ update_status ModuleParticles::Update()
 		}
 		else
 		{ 
-			App->renderer->Blit(graphics, p->position.x, p->position.y, &(p->anim.GetCurrentFrame()), 1.0f);
+			App->renderer->BlitDynamic(graphics, p->position.x, p->position.y, &(p->anim.GetCurrentFrame()), 1.0f);
 			++it;
 		}
 	}

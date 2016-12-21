@@ -75,7 +75,7 @@ update_status ModuleSceneStage2Platform::Update()
 	App->renderer->camera.x -= 0;
 
 	// Draw background --------------------------------------
-	App->renderer->Blit(graphics, 0, tremorOffset, &background);
+	App->renderer->BlitStatic(graphics, 0, tremorOffset, &background);
 
 	// Draw train --------------------------------------
 	if (playTrainAnim) {
@@ -107,8 +107,8 @@ update_status ModuleSceneStage2Platform::Update()
 
 	
 
-	App->renderer->Blit(graphics, trainCurrentPosition, 0, &train);
-	App->renderer->Blit(graphics, trainCurrentPosition + train.w, 0, &train2);
+	App->renderer->BlitStatic(graphics, trainCurrentPosition, 0, &train);
+	App->renderer->BlitStatic(graphics, trainCurrentPosition + train.w, 0, &train2);
 
 	return UPDATE_CONTINUE;
 }
