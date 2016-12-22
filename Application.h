@@ -18,6 +18,7 @@ class ModuleParticles;
 class ModulePlayer;
 class ModuleSceneIntro;
 class ModuleSceneStage2Platform;
+class EntityManager;
 
 class Application
 {
@@ -44,6 +45,7 @@ public:
 	ModulePlayer* player;
 	ModuleSceneIntro* scene_intro;
 	ModuleSceneStage2Platform* scene_platform;
+	EntityManager* manager;
 
 private:
 

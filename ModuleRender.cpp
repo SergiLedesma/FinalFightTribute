@@ -118,12 +118,10 @@ bool ModuleRender::BlitStatic(SDL_Texture* texture, int x, int y, const SDL_Rect
 }
 
 // Blit animation to screen
-bool ModuleRender::BlitDynamic(SDL_Texture* texture, int x, int y, const FramePair* section, float speed, bool direction)
+bool ModuleRender::BlitDynamic(SDL_Texture* texture, int x, int y, const FrameInfo* section, float speed, bool direction)
 {
 	bool ret = true;
 	SDL_Rect rect;
-	rect.x = (int)(camera.x * speed) + x * SCREEN_SIZE;
-	rect.y = (int)(camera.y * speed) + y * SCREEN_SIZE;
 
 	if(section != NULL)
 	{
@@ -137,7 +135,9 @@ bool ModuleRender::BlitDynamic(SDL_Texture* texture, int x, int y, const FramePa
 
 	rect.w *= SCREEN_SIZE;
 	rect.h *= SCREEN_SIZE;
+	rect.y = (int)(camera.y * speed) + (y + section->yOffset) * SCREEN_SIZE;
 	if (direction) {
+		rect.x = (int)(camera.x * speed) + x * SCREEN_SIZE;
 		if (SDL_RenderCopy(renderer, texture, &section->frame, &rect) != 0)
 		{
 			LOG("Cannot blit to screen. SDL_RenderCopy error: %s", SDL_GetError());
@@ -145,8 +145,7 @@ bool ModuleRender::BlitDynamic(SDL_Texture* texture, int x, int y, const FramePa
 		}
 	}
 	else {
-		rect.x = rect.x - section->offset*4; //TODO!!!
-		LOG("%d", section->offset);
+		rect.x = (int)(camera.x * speed) + (x - section->xOffset) * SCREEN_SIZE;
 		if (SDL_RenderCopyEx(renderer, texture, &section->frame, &rect, NULL, nullptr, SDL_FLIP_HORIZONTAL) != 0) {
 			LOG("Cannot blit to screen. SDL_RenderCopyEx error: %s", SDL_GetError());
 			ret = false;

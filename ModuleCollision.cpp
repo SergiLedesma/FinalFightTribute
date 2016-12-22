@@ -9,11 +9,11 @@ using namespace std;
 
 ModuleCollision::ModuleCollision()
 {
-	collisionMatrix[make_pair(PLAYER, WALL)] = true;
-	collisionMatrix[make_pair(PLAYER, ENEMY)] = true;
-	collisionMatrix[make_pair(PLAYER, ENEMY_SHOT)] = true;
-	collisionMatrix[make_pair(PLAYER_SHOT, WALL)] = true;
-	collisionMatrix[make_pair(PLAYER_SHOT, ENEMY)] = true;
+	collisionMatrix[make_pair(CPLAYER, CWALL)] = true;
+	collisionMatrix[make_pair(CPLAYER, CENEMY)] = true;
+	collisionMatrix[make_pair(CPLAYER, CENEMY_SHOT)] = true;
+	collisionMatrix[make_pair(CPLAYER_SHOT, CWALL)] = true;
+	collisionMatrix[make_pair(CPLAYER_SHOT, CENEMY)] = true;
 }
 
 // Destructor

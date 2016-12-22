@@ -4,9 +4,9 @@
 #include "Module.h"
 #include "Animation.h"
 #include "Point.h"
-#include "ModuleCollision.h"
 
 struct SDL_Texture;
+struct Collider;
 
 class ModulePlayer : public Module
 {
@@ -24,7 +24,7 @@ public:
 	SDL_Texture* graphics = nullptr;
 	Animation* currentAnimation = nullptr;
 	Animation* lastMovementAnimation = nullptr;
-	Collider* collider;
+	Collider* collider = nullptr;
 	Animation idle;
 	Animation right;
 	Animation left;

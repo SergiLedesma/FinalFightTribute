@@ -7,7 +7,7 @@
 struct SDL_Texture;
 struct SDL_Renderer;
 struct SDL_Rect;
-struct FramePair;
+struct FrameInfo;
 
 class ModuleRender : public Module
 {
@@ -21,7 +21,7 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 	bool BlitStatic(SDL_Texture * texture, int x, int y, const SDL_Rect * section, float speed = 1.0f);
-	bool BlitDynamic(SDL_Texture * texture, int x, int y, const FramePair * section, float speed = 1.0f, bool direction = true);
+	bool BlitDynamic(SDL_Texture * texture, int x, int y, const FrameInfo * section, float speed = 1.0f, bool direction = true);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
 
 public:

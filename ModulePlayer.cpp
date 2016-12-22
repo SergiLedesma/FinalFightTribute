@@ -14,29 +14,29 @@
 ModulePlayer::ModulePlayer(bool active) : Module(active)
 {
 	// idle animation
-	idle.frames.push_back({ {7, 7, 37, 88}, 0 });
+	idle.frames.push_back(FrameInfo({ 7, 7, 37, 88 }));
 	attack1.loop = false;
 	idle.speed = 0.2f;
 
 	// move right
-	right.frames.push_back({{ 14, 102, 24, 87 }, 0 });
-	right.frames.push_back({{ 53, 101, 45, 87 }, 0 });
-	right.frames.push_back({{ 114, 101, 37, 87 }, 0 });
-	right.frames.push_back({{ 164, 100, 26, 88 }, 0 });
-	right.frames.push_back({{ 213, 101, 45, 87 }, 0 });
-	right.frames.push_back({{ 267, 101, 36, 86 }, 0 });
+	right.frames.push_back(FrameInfo({ 14, 102, 24, 87 }));
+	right.frames.push_back(FrameInfo({ 53, 101, 45, 87 }));
+	right.frames.push_back(FrameInfo({ 114, 101, 37, 87 }));
+	right.frames.push_back(FrameInfo({ 164, 100, 26, 88 }));
+	right.frames.push_back(FrameInfo({ 213, 101, 45, 87 }));
+	right.frames.push_back(FrameInfo({ 267, 101, 36, 86 }));
 	right.loop = true;
 	right.speed = 0.1f;
-	
+
 	// move left
 	left = right;
 	left.loop = true;
 	left.speed = 0.1f;
 
 	// attack1
-	attack1.frames.push_back({{ 12, 440, 45, 85 }, 5 });
-	attack1.frames.push_back({{ 66, 440, 62, 85 }, 14 });
-	attack1.frames.push_back({{ 12, 440, 45, 85 }, 5 });
+	attack1.frames.push_back(FrameInfo({ 12, 440, 45, 85 }, 6, 3));
+	attack1.frames.push_back(FrameInfo({ 66, 440, 62, 85 }, 23, 3));
+	attack1.frames.push_back(FrameInfo({ 12, 440, 45, 85 }, 6, 3));
 	attack1.loop = false;
 	attack1.speed = 0.2f;
 }
@@ -55,7 +55,7 @@ bool ModulePlayer::Start()
 	position.x = 150;
 	position.y = 120;
 	weaponOffset = 25;
-	collider = App->collision->AddCollider({ position.x, position.y, 32, 12 }, PLAYER, std::bind(&ModulePlayer::OnCollision, this));
+	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&ModulePlayer::OnCollision, this));
 
 	return true;
 }
@@ -94,7 +94,7 @@ update_status ModulePlayer::Update()
 		}
 		attackDelay--;
 	}
-	
+
 	if (!blockAnimations) {
 		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		{
@@ -152,7 +152,7 @@ update_status ModulePlayer::Update()
 			//App->particles->AddParticle(App->particles->laser, position.x, position.y);
 		}
 	}
-	
+
 
 	if ((App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
@@ -161,14 +161,14 @@ update_status ModulePlayer::Update()
 		&& App->input->GetKey(SDL_SCANCODE_F) == KEY_IDLE)
 		|| (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT
 			&& App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-			|| (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT
-				&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
+		|| (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT
+			&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
 		currentAnimation = &idle;
 	}
 
 	// Draw everything --------------------------------------
 	if (destroyed == false) {
-		App->renderer->BlitDynamic(graphics, position.x, position.y + App->scene_platform->tremorOffset/2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
+		App->renderer->BlitDynamic(graphics, position.x, position.y + App->scene_platform->tremorOffset / 2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
 		collider->SetPos(position.x, position.y);
 	}
 	else {
@@ -191,7 +191,7 @@ void ModulePlayer::OnCollision() {
 	App->particles->AddParticle(App->particles->explosion, position.x, position.y);
 
 	srand(time(NULL));
-	
+
 	for (int i = 0; i < 4; i++) {
 		xOffset = rand() % offsetRange - offsetRange;
 		yOffset = rand() % offsetRange - offsetRange;

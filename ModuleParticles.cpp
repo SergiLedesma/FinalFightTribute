@@ -94,7 +94,7 @@ Particle::Particle(const Particle& p)
 	audio = p.audio;
 	collider = p.collider;
 	if (collider->rect.h != 0 && collider->rect.w != 0) {
-		collider = App->collision->AddCollider(p.collider->rect, PLAYER_SHOT, std::bind(&Particle::OnCollision, this));
+		collider = App->collision->AddCollider(p.collider->rect, CPLAYER_SHOT, std::bind(&Particle::OnCollision, this));
 	}	
 }
 
@@ -117,7 +117,7 @@ bool Particle::Update()
 	}
 	else {
 		lifeSpan--;
-		this->position.x = this->position.x + speed;
+		this->position.x = this->position.x + (int)speed;
 		collider->SetPos(this->position.x, this->position.y);
 	}
 

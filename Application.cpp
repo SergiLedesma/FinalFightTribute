@@ -1,4 +1,3 @@
-#include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRender.h"
 #include "ModuleTextures.h"
@@ -11,6 +10,8 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleSceneStage2Platform.h"
 #include "ModulePlayer.h"
+#include "EntityManager.h"
+#include "Application.h"
 
 using namespace std;
 
@@ -28,6 +29,7 @@ Application::Application()
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
 	modules.push_back(scene_platform = new ModuleSceneStage2Platform(false));
 	modules.push_back(player = new ModulePlayer(false));
+	modules.push_back(manager = new EntityManager(false));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());

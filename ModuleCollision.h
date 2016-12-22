@@ -7,11 +7,11 @@
 #include "Module.h"
 
 enum CollisionType {
-	ENEMY,
-	ENEMY_SHOT,
-	WALL,
-	PLAYER,
-	PLAYER_SHOT
+	CENEMY,
+	CENEMY_SHOT,
+	CWALL,
+	CPLAYER,
+	CPLAYER_SHOT
 };
 
 struct Collider

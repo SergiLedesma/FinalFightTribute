@@ -3,10 +3,13 @@
 
 using namespace std;
 
-struct FramePair {
+struct FrameInfo {
 	SDL_Rect frame;		// Sprite's x,y,w,h
-	int offset;			// Distance from elements's x centre to frame's x center. (In character it's distance from hip to frame's x middle value.)
-	//FramePair() : frame({ 0,0,0,0 }), offset(0) {};
+	int xOffset = 0;			// Distance from elements's x centre to frame's x center. (In character it's distance from hip to frame's x middle value.)
+	int yOffset = 0;			// Distance from elements's y centre to frame's y center. (In character it's distance from hip to frame's y middle value.)
+	FrameInfo(SDL_Rect frame) : FrameInfo(frame, 0, 0) {};
+	FrameInfo(SDL_Rect frame, int xOffset) : FrameInfo(frame, xOffset, 0) {};
+	FrameInfo(SDL_Rect frame, int xOffset, int yOffset) : frame(frame), xOffset(xOffset), yOffset(yOffset) {};
 };
 
 class Animation
@@ -14,11 +17,11 @@ class Animation
 public:
 	bool loop = true;
 	float speed = 1.0f;
-	vector<FramePair> frames;
+	vector<FrameInfo> frames;
 private:
 	float current_frame = 0.0f;
 	int loops = 0;
-	
+
 public:
 	Animation()
 	{}
@@ -26,16 +29,16 @@ public:
 	Animation(const Animation& anim) : loop(anim.loop), speed(anim.speed), frames(anim.frames)
 	{}
 
-	FramePair& GetCurrentFrame()
+	FrameInfo& GetCurrentFrame()
 	{
-		float last_frame = (float) frames.size();
+		float last_frame = (float)frames.size();
 
 		current_frame += speed;
 		if (current_frame >= last_frame)
 		{
 			current_frame = (loop) ? 0.0f : MAX(last_frame - 1.0f, 0.0f);
 			loops++;
-		} 
+		}
 
 		return frames[(int)current_frame];
 	}
