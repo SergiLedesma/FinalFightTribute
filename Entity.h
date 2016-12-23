@@ -22,15 +22,32 @@ class Entity
 public:
 	Entity();
 	virtual ~Entity();
-	bool Start();
-	update_status Update();
-	void OnCollision();
-	bool CleanUp();
+	virtual bool Init()
+	{
+		return true;
+	}
+
+	virtual bool Start()
+	{
+		return true;
+	}
+	
+	virtual update_status Update()
+	{
+		return UPDATE_CONTINUE;
+	}
+	
+	virtual bool CleanUp()
+	{
+		return true;
+	}
 
 public:
 	SDL_Texture* graphics = nullptr;
+	SDL_Rect rect;
 	Collider* collider = nullptr;
 	iPoint position;
+	int z;
 	bool destroyed = false;
 	bool direction = true; // true = right, false = left
 };

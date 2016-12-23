@@ -6,5 +6,6 @@ class Destructible :
 public:
 	Destructible();
 	~Destructible();
+	update_status Update();
 };
 

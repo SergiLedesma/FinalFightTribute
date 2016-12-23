@@ -7,6 +7,7 @@
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
 #include "EntityManager.h"
+#include "Destructible.h"
 #include "ModuleSceneStage2Platform.h"
 
 ModuleSceneStage2Platform::ModuleSceneStage2Platform(bool active) : Module(active)
@@ -44,9 +45,10 @@ bool ModuleSceneStage2Platform::Start()
 	App->particles->Enable();
 	App->collision->Enable();
 
-	App->audio->PlayMusic("ff/audio/stage2subway.ogg", 1.0f);
+	//App->audio->PlayMusic("ff/audio/stage2subway.ogg", 1.0f);
 	
-	App->manager->Create(PLAYER);
+	Destructible *  dest = (Destructible *)App->manager->Create(DESTRUCTIBLE);
+	//App->manager->Destroy(dest);
 
 	//App->collision->AddCollider({ 0, 224, 3930, 16 }, WALL, nullptr);
 	

@@ -29,7 +29,7 @@ Application::Application()
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
 	modules.push_back(scene_platform = new ModuleSceneStage2Platform(false));
 	modules.push_back(player = new ModulePlayer(false));
-	modules.push_back(manager = new EntityManager(false));
+	modules.push_back(manager = new EntityManager(true));
 
 	// Modules to draw on top of game logic
 	modules.push_back(collision = new ModuleCollision());

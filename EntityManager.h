@@ -14,10 +14,11 @@ public:
 
 	bool Start();
 	update_status Update();
-	void OnCollision();
 	bool CleanUp();
 
+	std::list<Entity*> entityList;
 	Entity * Create(EntityType type);
+	bool Destroy(Entity * entity);
 };
 
 #endif //__EntityManager_H__

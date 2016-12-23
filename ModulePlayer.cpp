@@ -49,11 +49,11 @@ bool ModulePlayer::Start()
 {
 	LOG("Loading player");
 
-	graphics = App->textures->Load("ff/Sprites/Cody1NoBackground.png");
+	graphics = App->textures->Load("ff/Sprites/Cody1.png");
 
 	destroyed = false;
-	position.x = 150;
-	position.y = 120;
+	position.x = 110;
+	position.y = 80;
 	weaponOffset = 25;
 	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&ModulePlayer::OnCollision, this));
 
