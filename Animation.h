@@ -7,6 +7,7 @@ struct FrameInfo {
 	SDL_Rect frame;		// Sprite's x,y,w,h
 	int xOffset = 0;			// Distance from elements's x centre to frame's x center. (In character it's distance from hip to frame's x middle value.)
 	int yOffset = 0;			// Distance from elements's y centre to frame's y center. (In character it's distance from hip to frame's y middle value.)
+	FrameInfo() : FrameInfo({ 0,0,0,0 }, 0, 0) {};
 	FrameInfo(SDL_Rect frame) : FrameInfo(frame, 0, 0) {};
 	FrameInfo(SDL_Rect frame, int xOffset) : FrameInfo(frame, xOffset, 0) {};
 	FrameInfo(SDL_Rect frame, int xOffset, int yOffset) : frame(frame), xOffset(xOffset), yOffset(yOffset) {};

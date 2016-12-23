@@ -7,6 +7,7 @@
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
 #include "ModulePlayer.h"
+#include "ModuleSceneStage2Platform.h"
 #include "SDL\include\SDL_render.h"
 
 
@@ -16,12 +17,11 @@ Destructible::Destructible()
 	destroyed = false;
 	position.x = 500;
 	position.y = 120;
-	rect.x = 30;
-	rect.y = 178;
-	rect.w = 32;
-	rect.h = 62;
 
-	
+	rect.frame.x = 30;
+	rect.frame.y = 178;
+	rect.frame.w = 32;
+	rect.frame.h = 62;
 }
 
 
@@ -30,6 +30,7 @@ Destructible::~Destructible()
 }
 
 update_status Destructible::Update() {
-	App->renderer->BlitStatic(graphics, position.x, position.y, &rect);
+	App->renderer->AddBlit(graphics, position.x, position.y + App->scene_platform->tremorOffset, &rect);
+	
 	return UPDATE_CONTINUE;
 }

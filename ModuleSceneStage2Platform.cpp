@@ -12,23 +12,23 @@
 
 ModuleSceneStage2Platform::ModuleSceneStage2Platform(bool active) : Module(active)
 {
-	background.x = 7;
-	background.y = 4;
-	background.w = 1119;
-	background.h = 195;
+	background.frame.x = 7;
+	background.frame.y = 4;
+	background.frame.w = 1119;
+	background.frame.h = 195;
 
-	train.x = 7;
-	train.y = 207;
-	train.w = 1579;
-	train.h = 139;
+	train.frame.x = 7;
+	train.frame.y = 207;
+	train.frame.w = 1579;
+	train.frame.h = 139;
 
-	train2.x = 50;
-	train2.y = 207;
-	train2.w = 1579;
-	train2.h = 139;
+	train2.frame.x = 50;
+	train2.frame.y = 207;
+	train2.frame.w = 1579;
+	train2.frame.h = 139;
 
 	trainSpeedDecay = baseTrainSpeedDecay;
-	trainEndPosition = -420 - train2.w;
+	trainEndPosition = -420 - train2.frame.w;
 }
 
 ModuleSceneStage2Platform::~ModuleSceneStage2Platform()
@@ -41,9 +41,10 @@ bool ModuleSceneStage2Platform::Start()
 
 	graphics = App->textures->Load("ff/sprites/Stage2NoBackground.png");
 
-	App->player->Enable();
+	//App->player->Enable();
 	App->particles->Enable();
 	App->collision->Enable();
+	App->manager->Create(PLAYER);
 
 	//App->audio->PlayMusic("ff/audio/stage2subway.ogg", 1.0f);
 	
@@ -61,7 +62,7 @@ bool ModuleSceneStage2Platform::CleanUp()
 	LOG("Unloading platform scene");
 
 	App->textures->Unload(graphics);
-	App->player->Disable();
+	//App->player->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
 
@@ -74,11 +75,10 @@ update_status ModuleSceneStage2Platform::Update()
 	// Move camera forward -----------------------------
 	int scroll_speed = 1;
 
-	App->player->position.x += 0;
 	App->renderer->camera.x -= 0;
 
 	// Draw background --------------------------------------
-	App->renderer->BlitStatic(graphics, 0, tremorOffset, &background);
+	App->renderer->AddBlit(graphics, 0, tremorOffset, &background, 1.0f, true, true);
 
 	// Draw train --------------------------------------
 	if (playTrainAnim) {
@@ -108,10 +108,8 @@ update_status ModuleSceneStage2Platform::Update()
 		tremorOffset = 0;
 	}
 
-	
-
-	App->renderer->BlitStatic(graphics, trainCurrentPosition, 0, &train);
-	App->renderer->BlitStatic(graphics, trainCurrentPosition + train.w, 0, &train2);
+	App->renderer->AddBlit(graphics, trainCurrentPosition, 0, &train, 1.0f, true, true);
+	App->renderer->AddBlit(graphics, trainCurrentPosition + train.frame.w, 0, &train2, 1.0f, true, true);
 
 	return UPDATE_CONTINUE;
 }

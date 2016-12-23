@@ -64,7 +64,16 @@ update_status ModuleRender::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->renderer->camera.x -= speed;
-
+	
+	// Sort queue of elements to blit
+	blitList.sort([](BlitInfo const a, BlitInfo const b) { return a.z < b.z;});
+	
+	// Blit all elements in queue
+	for (std::list<BlitInfo>::iterator it = blitList.begin(); it != blitList.end(); ++it)
+	{
+		Blit(it->texture, it->x, it->y, it->section, it->speed, it->direction);
+	}
+	blitList.clear();
 	return UPDATE_CONTINUE;
 }
 
@@ -87,7 +96,7 @@ bool ModuleRender::CleanUp()
 
 	return true;
 }
-
+/*
 // Blit image to screen
 bool ModuleRender::BlitStatic(SDL_Texture* texture, int x, int y, const SDL_Rect* section, float speed)
 {
@@ -116,9 +125,33 @@ bool ModuleRender::BlitStatic(SDL_Texture* texture, int x, int y, const SDL_Rect
 
 	return ret;
 }
+*/
 
-// Blit animation to screen
-bool ModuleRender::BlitDynamic(SDL_Texture* texture, int x, int y, const FrameInfo* section, float speed, bool direction)
+// Add elements to queue list
+bool ModuleRender::AddBlit(SDL_Texture* texture, int x, int y, const FrameInfo* section, float speed, bool direction, bool isBackground)
+{
+	BlitInfo currentBlit = BlitInfo();
+	currentBlit.texture = texture;
+	currentBlit.x = x;
+	currentBlit.y = y;
+	currentBlit.section = section;
+	currentBlit.speed = speed;
+	currentBlit.direction = direction;
+	if (!isBackground) {
+		currentBlit.z = y + section->frame.h;
+	}
+	else {
+		currentBlit.z = -1000;
+	}
+
+
+	blitList.push_back(currentBlit);
+
+	return true;
+}
+
+// Blit to screen
+bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const FrameInfo* section, float speed, bool direction)
 {
 	bool ret = true;
 	SDL_Rect rect;

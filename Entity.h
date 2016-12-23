@@ -3,8 +3,10 @@
 
 #include "Globals.h"
 #include "Point.h"
+#include "Animation.h"
 
 struct SDL_Texture;
+struct FrameInfo;
 struct Collider;
 
 enum EntityType {
@@ -44,10 +46,10 @@ public:
 
 public:
 	SDL_Texture* graphics = nullptr;
-	SDL_Rect rect;
 	Collider* collider = nullptr;
+	FrameInfo rect;
 	iPoint position;
-	int z;
+	int z = NULL;
 	bool destroyed = false;
 	bool direction = true; // true = right, false = left
 };

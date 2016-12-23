@@ -168,7 +168,7 @@ update_status ModulePlayer::Update()
 
 	// Draw everything --------------------------------------
 	if (destroyed == false) {
-		App->renderer->BlitDynamic(graphics, position.x, position.y + App->scene_platform->tremorOffset / 2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
+		App->renderer->AddBlit(graphics, position.x, position.y + App->scene_platform->tremorOffset / 2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
 		collider->SetPos(position.x, position.y);
 	}
 	else {

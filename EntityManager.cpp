@@ -73,7 +73,7 @@ Entity * EntityManager::Create(EntityType type)
 		LOG("Entity created");
 		entityList.push_back(newEntity);
 	}
-
+	newEntity->Start();
 	return newEntity;
 }
 

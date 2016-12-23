@@ -4,6 +4,7 @@
 #include "Module.h"
 
 struct SDL_Texture;
+struct FrameInfo;
 
 class ModuleSceneStage2Platform : public Module
 {
@@ -19,9 +20,9 @@ public:
 public:
 
 	SDL_Texture* graphics = nullptr;
-	SDL_Rect background;
-	SDL_Rect train;
-	SDL_Rect train2;
+	FrameInfo background;
+	FrameInfo train;
+	FrameInfo train2;
 
 	bool playTrainAnim = false;
 	int tremorOffset = NULL;

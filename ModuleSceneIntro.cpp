@@ -27,7 +27,7 @@ bool ModuleSceneIntro::Start()
 	background = App->textures->Load("ff/sprites/intro.png");
 	graphics = App->textures->Load("ff/Sprites/start.png");
 
-	//App->audio->PlayMusic("ff/audio/intro.ogg", 1.0f);
+	App->audio->PlayMusic("ff/audio/intro.ogg", 1.0f);
 	if (fx == 0)
 		fx = App->audio->LoadFx("ff/sounds/song004.wav");
 
@@ -43,6 +43,7 @@ bool ModuleSceneIntro::CleanUp()
 
 	App->textures->Unload(background);
 	App->textures->Unload(graphics);
+	RELEASE(startAnimation);
 
 	return true;
 }
@@ -50,8 +51,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	App->renderer->BlitStatic(background, 0, -16, NULL);
-	App->renderer->BlitDynamic(graphics, SCREEN_WIDTH / 2 - (startAnimation->GetCurrentFrame().frame.w/2), SCREEN_HEIGHT - SCREEN_HEIGHT/2.5, &(startAnimation->GetCurrentFrame()));
+	App->renderer->AddBlit(background, 0, -16, NULL);
+	App->renderer->AddBlit(graphics, SCREEN_WIDTH / 2 - (startAnimation->GetCurrentFrame().frame.w/2), SCREEN_HEIGHT - SCREEN_HEIGHT/2.5, &(startAnimation->GetCurrentFrame()));
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->fade->isFading() == false)
 	{

@@ -44,7 +44,7 @@ bool ModuleParticles::CleanUp()
 // Update: draw background
 update_status ModuleParticles::Update()
 {
-	for (list<Particle*>::iterator it = active.begin(); it != active.end();)
+	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
 	{
 		Particle* p = *it;
 
@@ -55,7 +55,7 @@ update_status ModuleParticles::Update()
 		}
 		else
 		{ 
-			App->renderer->BlitDynamic(graphics, p->position.x, p->position.y, &(p->anim.GetCurrentFrame()), 1.0f);
+			App->renderer->AddBlit(graphics, p->position.x, p->position.y, &(p->anim.GetCurrentFrame()), 1.0f);
 			++it;
 		}
 	}

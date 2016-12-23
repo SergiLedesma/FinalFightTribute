@@ -16,9 +16,11 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	std::list<Entity*> entityList;
 	Entity * Create(EntityType type);
 	bool Destroy(Entity * entity);
+
+private:
+	std::list<Entity*> entityList;
 };
 
 #endif //__EntityManager_H__
