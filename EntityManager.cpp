@@ -3,7 +3,9 @@
 #include "Entity.h"
 #include "Player.h"
 #include "Enemy.h"
-#include "Destructible.h"
+#include "Barrel.h"
+#include "Wheels.h"
+#include "Box.h"
 #include "Weapon.h"
 #include "Food.h"
 #include "Score.h"
@@ -25,10 +27,29 @@ bool EntityManager::Start()
 	return true;
 }
 
+update_status EntityManager::PreUpdate()
+{
+	// Remove all entities scheduled for deletion
+	for (list<Entity*>::iterator it = entityList.begin(); it != entityList.end();)
+	{
+		if ((*it)->to_delete == true)
+		{
+			RELEASE(*it);
+			it = entityList.erase(it);
+		}
+		else
+			++it;
+	}
+	return UPDATE_CONTINUE;
+}
+
 update_status EntityManager::Update()
 {
-	for (std::list<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
-		(*it)->Update();
+	for (std::list<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ) {
+		if (*it != nullptr) {
+			(*it)->Update();
+			++it;
+		}
 	}
 	return UPDATE_CONTINUE;
 }
@@ -52,8 +73,14 @@ Entity * EntityManager::Create(EntityType type)
 	case ENEMY:
 		newEntity = new Enemy();
 		break;
-	case DESTRUCTIBLE:
-		newEntity = new Destructible();
+	case BARREL:
+		newEntity = new Barrel();
+		break;
+	case WHEELS:
+		newEntity = new Wheels();
+		break;
+	case BOX:
+		newEntity = new Box();
 		break;
 	case WEAPON:
 		newEntity = new Weapon();
@@ -75,18 +102,4 @@ Entity * EntityManager::Create(EntityType type)
 	}
 	newEntity->Start();
 	return newEntity;
-}
-
-bool EntityManager::Destroy(Entity * entity)
-{
-	bool ret = false;
-	for (std::list<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
-		if (*it == entity) {
-			RELEASE(*it);
-			ret = true;
-			LOG("Entity destroyed");
-			break;
-		}
-	}
-	return ret;
 }

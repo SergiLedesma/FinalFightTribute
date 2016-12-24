@@ -11,7 +11,8 @@ enum CollisionType {
 	CENEMY_SHOT,
 	CWALL,
 	CPLAYER,
-	CPLAYER_SHOT
+	CPLAYER_SHOT,
+	CDESTRUCTIBLE
 };
 
 struct Collider

@@ -12,7 +12,9 @@ struct Collider;
 enum EntityType {
 	PLAYER,
 	ENEMY,
-	DESTRUCTIBLE,
+	BARREL,
+	WHEELS,
+	BOX,
 	WEAPON,
 	FOOD,
 	SCORE,
@@ -24,10 +26,6 @@ class Entity
 public:
 	Entity();
 	virtual ~Entity();
-	virtual bool Init()
-	{
-		return true;
-	}
 
 	virtual bool Start()
 	{
@@ -50,8 +48,11 @@ public:
 	FrameInfo rect;
 	iPoint position;
 	int z = NULL;
-	bool destroyed = false;
+	bool to_delete = false;
 	bool direction = true; // true = right, false = left
+
+protected:
+	int lifeSpan = NULL;
 };
 
 #endif

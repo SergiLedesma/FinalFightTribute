@@ -5,6 +5,7 @@
 
 struct SDL_Texture;
 struct FrameInfo;
+class Barrel;
 
 class ModuleSceneStage2Platform : public Module
 {
@@ -34,6 +35,7 @@ private:
 	int baseTrainSpeedDecay = 330;
 	int trainCurrentPosition = 1000;
 	int trainEndPosition = NULL;
+	Barrel *  dest;
 };
 
 #endif // __MODULESCENESTAGE2PLATFORM_H__

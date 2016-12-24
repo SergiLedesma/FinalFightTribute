@@ -185,7 +185,7 @@ update_status Player::Update()
 void Player::OnCollision() {
 
 	LOG("Collision on player");
-
+	/*
 	int xOffset = 0;
 	int yOffset = 0;
 	int offsetRange = 20;
@@ -201,4 +201,5 @@ void Player::OnCollision() {
 	}
 	destroyed = true;
 	collider->to_delete = true;
+	*/
 }

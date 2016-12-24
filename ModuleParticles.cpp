@@ -44,7 +44,7 @@ bool ModuleParticles::CleanUp()
 // Update: draw background
 update_status ModuleParticles::Update()
 {
-	for (list<Particle*>::iterator it = active.begin(); it != active.end(); ++it)
+	for (list<Particle*>::iterator it = active.begin(); it != active.end(); )
 	{
 		Particle* p = *it;
 
@@ -93,9 +93,11 @@ Particle::Particle(const Particle& p)
 	anim = p.anim;
 	audio = p.audio;
 	collider = p.collider;
-	if (collider->rect.h != 0 && collider->rect.w != 0) {
-		collider = App->collision->AddCollider(p.collider->rect, CPLAYER_SHOT, std::bind(&Particle::OnCollision, this));
-	}	
+	if (collider != nullptr) {
+		if (collider->rect.h != 0 && collider->rect.w != 0) {
+			collider = App->collision->AddCollider(p.collider->rect, CPLAYER_SHOT, std::bind(&Particle::OnCollision, this));
+		}
+	}
 }
 
 Particle::~Particle()

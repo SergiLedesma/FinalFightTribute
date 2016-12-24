@@ -7,5 +7,9 @@ public:
 	Destructible();
 	~Destructible();
 	update_status Update();
+	void OnCollision();
+	FrameInfo destroyedRect;
+	FrameInfo nonDestroyedRect;
+	bool destroyed = false;
 };
 

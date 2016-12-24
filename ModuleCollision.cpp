@@ -14,6 +14,7 @@ ModuleCollision::ModuleCollision()
 	collisionMatrix[make_pair(CPLAYER, CENEMY_SHOT)] = true;
 	collisionMatrix[make_pair(CPLAYER_SHOT, CWALL)] = true;
 	collisionMatrix[make_pair(CPLAYER_SHOT, CENEMY)] = true;
+	collisionMatrix[make_pair(CPLAYER, CDESTRUCTIBLE)] = true;
 }
 
 // Destructor

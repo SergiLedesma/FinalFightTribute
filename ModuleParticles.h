@@ -23,7 +23,7 @@ struct Particle
 	Animation anim;
 	ModuleAudio audio;
 
-	Collider* collider;
+	Collider* collider = nullptr;
 
 	Particle();
 	Particle(const Particle& p);
