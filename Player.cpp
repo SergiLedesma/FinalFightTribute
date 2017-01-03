@@ -14,6 +14,9 @@
 
 Player::Player() {
 	LOG("PLAYER SPAWNED");
+
+	Life = new AnimationStateMachine(this);
+
 	// idle animation
 	idle.frames.push_back(FrameInfo({ 7, 7, 37, 88 }));
 	attack1.loop = false;
@@ -75,13 +78,34 @@ bool Player::CleanUp()
 // Update: draw background
 update_status Player::Update()
 {
-	int speed = 1;
+	Life->Update();
 
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
 	{
 		App->scene_platform->playTrainAnim = true;
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	{
+		Life->Move(RIGHT);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	{
+		Life->Move(LEFT);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	{
+		Life->Move(UP);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	{
+		Life->Move(DOWN);
+	}
+
+	/*
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
 		attack1.Reset();
@@ -154,7 +178,7 @@ update_status Player::Update()
 			//App->particles->AddParticle(App->particles->laser, position.x, position.y);
 		}
 	}
-
+	*/
 
 	if ((App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
@@ -165,9 +189,9 @@ update_status Player::Update()
 			&& App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		|| (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT
 			&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
-		currentAnimation = &idle;
+		Life->Idle();
 	}
-	
+
 	// Draw everything --------------------------------------
 	if (destroyed == false) {
 		App->renderer->AddBlit(graphics, position.x, position.y + App->scene_platform->tremorOffset / 2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);

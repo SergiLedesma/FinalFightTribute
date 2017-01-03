@@ -5,7 +5,7 @@
 #include "ModuleTextures.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
-#include "ModulePlayer.h"
+#include "EntityManager.h"
 
 #include "SDL/include/SDL_timer.h"
 
@@ -67,7 +67,7 @@ update_status ModuleParticles::Update()
 void ModuleParticles::AddParticle(const Particle& particle, int x, int y)
 {
 	Particle * p = new Particle(particle);
-	p->position = { x + App->player->weaponOffset, y };
+	p->position = { x, y };
 	active.push_back(p);
 	
 }
@@ -95,7 +95,7 @@ Particle::Particle(const Particle& p)
 	collider = p.collider;
 	if (collider != nullptr) {
 		if (collider->rect.h != 0 && collider->rect.w != 0) {
-			collider = App->collision->AddCollider(p.collider->rect, CPLAYER_SHOT, std::bind(&Particle::OnCollision, this));
+			collider = App->collision->AddCollider(p.collider->rect, CPLAYER_ATTACK, std::bind(&Particle::OnCollision, this));
 		}
 	}
 }

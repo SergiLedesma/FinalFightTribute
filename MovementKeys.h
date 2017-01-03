@@ -1,0 +1,6 @@
+enum MOVEMENTKEYS {
+	RIGHT,
+	LEFT,
+	UP,
+	DOWN
+};

@@ -29,13 +29,15 @@ bool Barrel::Start() {
 	destroyedRect.frame.w = 45;
 	destroyedRect.frame.h = 95;
 
+	this->AddCollider();
+	collider->rect.w = 32;
+	collider->rect.h = 62;
+
 	destroyed = false;
-	position.x = 200;
-	position.y = 120;
+	position.x = 0;
+	position.y = 0;
 
 	lifeSpan = 30;
-
-	collider = App->collision->AddCollider({ position.x, position.y, rect.frame.w, rect.frame.h }, CDESTRUCTIBLE, std::bind(&Barrel::OnCollision, this));
 
 	return true;
 }

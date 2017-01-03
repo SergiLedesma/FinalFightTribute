@@ -18,7 +18,6 @@ public:
 	bool CleanUp();
 
 	Entity * Create(EntityType type);
-	bool Destroy(Entity * entity);
 
 private:
 	std::list<Entity*> entityList;

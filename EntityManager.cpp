@@ -4,8 +4,6 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Barrel.h"
-#include "Wheels.h"
-#include "Box.h"
 #include "Weapon.h"
 #include "Food.h"
 #include "Score.h"
@@ -75,12 +73,6 @@ Entity * EntityManager::Create(EntityType type)
 		break;
 	case BARREL:
 		newEntity = new Barrel();
-		break;
-	case WHEELS:
-		newEntity = new Wheels();
-		break;
-	case BOX:
-		newEntity = new Box();
 		break;
 	case WEAPON:
 		newEntity = new Weapon();

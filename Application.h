@@ -32,20 +32,19 @@ public:
 	bool CleanUp();
 
 public:
-	ModuleRender* renderer;
-	ModuleWindow* window;
-	ModuleTextures* textures;
-	ModuleInput* input;
-	ModuleAudio* audio;
-	ModuleFadeToBlack* fade;
-	ModuleCollision* collision;
-	ModuleParticles* particles;
+	ModuleRender* renderer = nullptr;
+	ModuleWindow* window = nullptr;
+	ModuleTextures* textures = nullptr;
+	ModuleInput* input = nullptr;
+	ModuleAudio* audio = nullptr;
+	ModuleFadeToBlack* fade = nullptr;
+	ModuleCollision* collision = nullptr;
+	ModuleParticles* particles = nullptr;
 
 	// Game modules ---
-	ModulePlayer* player;
-	ModuleSceneIntro* scene_intro;
-	ModuleSceneStage2Platform* scene_platform;
-	EntityManager* manager;
+	ModuleSceneIntro* scene_intro = nullptr;
+	ModuleSceneStage2Platform* scene_platform = nullptr;
+	EntityManager* manager = nullptr;
 
 private:
 

@@ -2,6 +2,7 @@
 #include "Creature.h"
 #include "Animation.h"
 #include "Point.h"
+#include "AnimationStateMachine.h"
 
 struct SDL_Texture;
 struct Collider;
@@ -33,8 +34,10 @@ public:
 	bool destroyed = false;
 	bool direction = true; // true = right, false = left
 	int weaponOffset;
+	int speed = 1;
 
 private:
 	int attackDelay = 20;
+	AnimationStateMachine* Life;
 };
 

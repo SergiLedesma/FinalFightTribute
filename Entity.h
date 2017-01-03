@@ -13,8 +13,6 @@ enum EntityType {
 	PLAYER,
 	ENEMY,
 	BARREL,
-	WHEELS,
-	BOX,
 	WEAPON,
 	FOOD,
 	SCORE,

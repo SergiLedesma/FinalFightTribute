@@ -6,7 +6,6 @@
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
-#include "ModulePlayer.h"
 #include "EntityManager.h"
 #include "ModuleSceneStage2Platform.h"
 #include "SDL\include\SDL_render.h"
@@ -46,4 +45,8 @@ void Destructible::OnCollision() {
 	destroyed = true;
 	position.y -= 25;
 	collider->to_delete = true;
+}
+
+void Destructible::AddCollider() {
+	collider = App->collision->AddCollider({ position.x, position.y, rect.frame.w, rect.frame.h }, CDESTRUCTIBLE, std::bind(&Destructible::OnCollision, this));
 }

@@ -2,10 +2,11 @@
 #define __MODULESCENESTAGE2PLATFORM_H__
 
 #include "Module.h"
+#include "Animation.h"
 
 struct SDL_Texture;
-struct FrameInfo;
 class Barrel;
+class Player;
 
 class ModuleSceneStage2Platform : public Module
 {
@@ -28,6 +29,8 @@ public:
 	bool playTrainAnim = false;
 	int tremorOffset = NULL;
 
+	Player* player = nullptr;
+
 private:
 	int tremorSpan = 5;
 	int trainSpeed = 5;
@@ -35,7 +38,8 @@ private:
 	int baseTrainSpeedDecay = 330;
 	int trainCurrentPosition = 1000;
 	int trainEndPosition = NULL;
-	Barrel *  dest;
+	Barrel *  barrel1 = nullptr;
+	Barrel *  barrel2 = nullptr;
 };
 
 #endif // __MODULESCENESTAGE2PLATFORM_H__

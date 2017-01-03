@@ -8,6 +8,7 @@ public:
 	~Destructible();
 	update_status Update();
 	void OnCollision();
+	void AddCollider();
 	FrameInfo destroyedRect;
 	FrameInfo nonDestroyedRect;
 	bool destroyed = false;

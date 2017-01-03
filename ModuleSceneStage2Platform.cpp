@@ -3,7 +3,6 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModuleRender.h"
-#include "ModulePlayer.h"
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
 #include "EntityManager.h"
@@ -45,13 +44,19 @@ bool ModuleSceneStage2Platform::Start()
 	//App->player->Enable();
 	App->particles->Enable();
 	App->collision->Enable();
-	App->manager->Create(PLAYER);
+	player = (Player*)App->manager->Create(PLAYER);
 
 	//App->audio->PlayMusic("ff/audio/stage2subway.ogg", 1.0f);
 	
-	dest = (Barrel *)App->manager->Create(BARREL);
+	barrel1 = (Barrel *)App->manager->Create(BARREL);
+	barrel1->position.x = 200;
+	barrel1->position.y = 120;
+	barrel1->collider->SetPos(200, 120);
 	
-	//App->manager->Destroy(dest);
+	barrel2 = (Barrel *)App->manager->Create(BARREL);
+	barrel2->position.x = 250;
+	barrel2->position.y = 100;
+	barrel2->collider->SetPos(250, 100);
 
 	//App->collision->AddCollider({ 0, 224, 3930, 16 }, WALL, nullptr);
 	
@@ -63,8 +68,9 @@ bool ModuleSceneStage2Platform::CleanUp()
 {
 	LOG("Unloading platform scene");
 
+	barrel2->to_delete = true;
+	barrel1->to_delete = true;
 	App->textures->Unload(graphics);
-	//App->player->Disable();
 	App->collision->Disable();
 	App->particles->Disable();
 
@@ -85,7 +91,6 @@ update_status ModuleSceneStage2Platform::Update()
 	// Draw train --------------------------------------
 	if (playTrainAnim) {
 		playTrainAnim = ChangeTrainPosition(trainSpeed);
-		LOG("%d", trainSpeed);
 		if (trainSpeedDecay <= 0) {
 			if (trainSpeed > 2) {
 				trainSpeed -= 1;
