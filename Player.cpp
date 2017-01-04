@@ -19,7 +19,7 @@ Player::Player() {
 
 	// idle animation
 	idle.frames.push_back(FrameInfo({ 7, 7, 37, 88 }));
-	attack1.loop = false;
+	idle.loop = false;
 	idle.speed = 0.2f;
 
 	// move right
@@ -43,6 +43,57 @@ Player::Player() {
 	attack1.frames.push_back(FrameInfo({ 12, 440, 45, 85 }, 6, 3));
 	attack1.loop = false;
 	attack1.speed = 0.2f;
+
+	// attack2
+	attack2.frames.push_back(FrameInfo({ 136, 449, 47, 76 }, 10, 12));
+	attack2.frames.push_back(FrameInfo({ 197, 454, 75, 71 }, 40, 15));
+	attack2.loop = false;
+	attack2.speed = 0.2f;
+
+	// attack3
+	attack3.frames.push_back(FrameInfo({ 277, 458, 56, 67 }, 25, 18));
+	attack3.frames.push_back(FrameInfo({ 349, 453, 58, 73 }, 30, 15));
+	attack3.frames.push_back(FrameInfo({ 410, 441, 58, 85 }, 22, -2));
+	attack3.frames.push_back(FrameInfo({ 476, 423, 40, 104 }, 10, -20));
+	attack3.loop = false;
+	attack3.speed = 0.2f;
+	
+	// jumpUp
+	jumpUp.frames.push_back(FrameInfo({ 18, 239, 37, 79 }, 0, 10));
+	jumpUp.frames.push_back(FrameInfo({ 75, 204, 30, 104 }, 0, -10));
+	jumpUp.frames.push_back(FrameInfo({ 75, 204, 30, 104 }, 0, -10));
+	jumpUp.frames.push_back(FrameInfo({ 75, 204, 30, 104 }, 0, -10));
+	jumpUp.frames.push_back(FrameInfo({ 123, 219, 38, 72 }, 0, 0));
+	jumpUp.frames.push_back(FrameInfo({ 123, 219, 38, 72 }, 0, 0));
+	jumpUp.frames.push_back(FrameInfo({ 75, 204, 30, 104 }, 0, -10));
+	jumpUp.frames.push_back(FrameInfo({ 75, 204, 30, 104 }, 0, -10));
+	jumpUp.frames.push_back(FrameInfo({ 18, 239, 37, 79 }, 0, 10));
+	jumpUp.loop = false;
+	jumpUp.speed = 0.2f;
+
+	// jumpForward
+	jumpForward.frames.push_back(FrameInfo({ 18, 239, 37, 79 }, 0, 10));
+	jumpForward.frames.push_back(FrameInfo({ 75, 204, 30, 104 }, 0, -10));
+	jumpForward.frames.push_back(FrameInfo({ 123, 219, 38, 72 }, 0, 0));
+	jumpForward.frames.push_back(FrameInfo({ 243, 242, 52, 48 }, 0, 0));
+	jumpForward.frames.push_back(FrameInfo({ 306, 239, 48, 52 }, 0, 0));
+	jumpForward.frames.push_back(FrameInfo({ 367, 240, 52, 48 }, 0, 0));
+	jumpForward.frames.push_back(FrameInfo({ 434, 232, 48, 52 }, 0, 0));
+	jumpForward.frames.push_back(FrameInfo({ 18, 239, 37, 79 }, 0, 10));
+	jumpForward.loop = false;
+	jumpForward.speed = 0.2f;
+
+	// jumpUpKick
+	jumpUpKick.frames.push_back(FrameInfo({ 19, 541, 38, 82 }, 0, 0));
+	jumpUpKick.frames.push_back(FrameInfo({ 68, 541, 46, 80 }, 0, 0));
+	jumpUpKick.loop = false;
+	jumpUpKick.speed = 0.2f;
+
+	// jumpForwardKick
+	jumpForwardKick.frames.push_back(FrameInfo({ 17, 329, 38, 80 }, 0, 0));
+	jumpForwardKick.frames.push_back(FrameInfo({ 67, 353, 79, 56 }, 50, 10));
+	jumpForwardKick.loop = false;
+	jumpForwardKick.speed = 0.2f;
 }
 
 Player::~Player()
@@ -72,6 +123,9 @@ bool Player::CleanUp()
 
 	App->textures->Unload(graphics);
 
+	RELEASE(Life);
+	delete Life;
+
 	return true;
 }
 
@@ -83,6 +137,11 @@ update_status Player::Update()
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
 	{
 		App->scene_platform->playTrainAnim = true;
+	}
+
+	if ((App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) && (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+	{
+		Life->Jump(RIGHT);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
@@ -105,81 +164,18 @@ update_status Player::Update()
 		Life->Move(DOWN);
 	}
 
-	/*
 	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
 	{
-		attack1.Reset();
-		currentAnimation = &attack1;
-		blockAnimations = true;
+		Life->Attack();
 	}
 
-	if (blockAnimations) {
-		if (attackDelay <= 0) {
-			blockAnimations = false;
-			attackDelay = 20;
-		}
-		attackDelay--;
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	{
+		Life->Jump(NONE);
 	}
 
-	if (!blockAnimations) {
-		if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
-		{
-			position.x -= speed;
-			direction = false;
-			if (currentAnimation != &left)
-			{
-				left.Reset();
-				currentAnimation = &left;
-				lastMovementAnimation = currentAnimation;
-			}
-		}
 
-		if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
-		{
-			position.x += speed;
-			direction = true;
-			if (currentAnimation != &right)
-			{
-				right.Reset();
-				currentAnimation = &right;
-				lastMovementAnimation = currentAnimation;
-			}
-		}
-
-		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
-		{
-			position.y += speed;
-			if (lastMovementAnimation != nullptr) {
-				currentAnimation = lastMovementAnimation;
-			}
-			else {
-				right.Reset();
-				currentAnimation = &right;
-				lastMovementAnimation = currentAnimation;
-			}
-		}
-
-		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		{
-			position.y -= speed;
-			if (lastMovementAnimation != nullptr) {
-				currentAnimation = lastMovementAnimation;
-			}
-			else {
-				right.Reset();
-				currentAnimation = &right;
-				lastMovementAnimation = currentAnimation;
-			}
-		}
-
-
-		if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-		{
-			//App->particles->AddParticle(App->particles->laser, position.x, position.y);
-		}
-	}
-	*/
-
+	/*
 	if ((App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
 		&& App->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
@@ -191,6 +187,7 @@ update_status Player::Update()
 			&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
 		Life->Idle();
 	}
+	*/
 
 	// Draw everything --------------------------------------
 	if (destroyed == false) {

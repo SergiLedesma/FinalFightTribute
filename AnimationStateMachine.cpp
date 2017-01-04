@@ -1,7 +1,9 @@
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleInput.h"
 #include "Player.h"
 #include "AnimationStateMachine.h"
+
 
 //-----------------------------------------------------------------------------------------
 // Update of the StateMachine. 
@@ -17,7 +19,7 @@ void AnimationStateMachine::Update()
 //-----------------------------------------------------------------------------------------
 void AnimationStateMachine::Move(MOVEMENTKEYS direction)
 {
-	AnimationEventData* data = new AnimationEventData(direction);
+	data = new AnimationEventData(direction);
 	BEGIN_TRANSITION_MAP							// - Current State -
 		TRANSITION_MAP_ENTRY(ST_UNDEFINED)			// ST_UNDEFINED
 		TRANSITION_MAP_ENTRY(ST_MOVING)				// ST_IDLE
@@ -39,8 +41,9 @@ void AnimationStateMachine::Move(MOVEMENTKEYS direction)
 //-----------------------------------------------------------------------------------------
 // Event happened. It makes the transition to the corresponding state.
 //-----------------------------------------------------------------------------------------
-void AnimationStateMachine::Jump()
+void AnimationStateMachine::Jump(MOVEMENTKEYS direction)
 {
+	data = new AnimationEventData(direction);
 	BEGIN_TRANSITION_MAP							// - Current State -
 		TRANSITION_MAP_ENTRY(ST_UNDEFINED)			// ST_UNDEFINED
 		TRANSITION_MAP_ENTRY(ST_JUMP_UP)			// ST_IDLE
@@ -84,7 +87,7 @@ void AnimationStateMachine::Idle()
 {
 	BEGIN_TRANSITION_MAP							// - Current State -
 		TRANSITION_MAP_ENTRY(ST_IDLE)				// ST_UNDEFINED
-		TRANSITION_MAP_ENTRY(ST_IDLE)				// ST_IDLE
+		TRANSITION_MAP_ENTRY(EVENT_IGNORED)			// ST_IDLE
 		TRANSITION_MAP_ENTRY(ST_IDLE)				// ST_MOVING
 		TRANSITION_MAP_ENTRY(ST_IDLE)				// ST_JUMP_UP
 		TRANSITION_MAP_ENTRY(ST_IDLE)				// ST_JUMP_UP_KICK
@@ -158,7 +161,7 @@ void AnimationStateMachine::OnExit_Idle(State NextState)
 void AnimationStateMachine::OnEnter_Moving(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_Moving. PrevState: %s", StateToStr(PrevState), "\n");
-	switch (((AnimationEventData*) pData)->direction) {
+	switch (((AnimationEventData*)pData)->direction) {
 	case RIGHT:
 		player->position.x += player->speed;
 		player->direction = true;
@@ -201,14 +204,22 @@ void AnimationStateMachine::OnEnter_Moving(State PrevState, const EventData* pDa
 			player->lastMovementAnimation = player->currentAnimation;
 		}
 		break;
-	default:
-		break;
 	}
 }
 
 void AnimationStateMachine::OnUpdate_Moving()
 {
 	LOG("OnUpdate_Moving\n");
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
+		&& App->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
+		&& App->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
+		&& App->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
+		|| (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT
+			&& App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+		|| (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT
+			&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_Moving(State NextState)
@@ -222,11 +233,37 @@ void AnimationStateMachine::OnExit_Moving(State NextState)
 void AnimationStateMachine::OnEnter_JumpUp(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_JumpUp. PrevState: %s", StateToStr(PrevState), "\n");
+	playerRealY = player->position.y;
+	player->finishedAnimation = false;
+	player->animationCountdown = 40;
+	if (player->currentAnimation != &player->jumpUp)
+	{
+		player->jumpUp.Reset();
+		player->currentAnimation = &player->jumpUp;
+		player->lastMovementAnimation = player->currentAnimation;
+	}
 }
 
 void AnimationStateMachine::OnUpdate_JumpUp()
 {
 	LOG("OnUpdate_JumpUp\n");
+	if (player->animationCountdown >= 20) {
+		player->position.y -= 3;
+	}
+	else {
+		player->position.y += 3;
+	}
+	if (player->animationCountdown <= 0) {
+		player->position.y = playerRealY;
+		player->finishedAnimation = true;
+	}
+	else {
+		player->animationCountdown -= 1;
+	}
+	LOG("COUNTDOWN %d", player->animationCountdown);
+	if (player->finishedAnimation) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_JumpUp(State NextState)
@@ -240,11 +277,34 @@ void AnimationStateMachine::OnExit_JumpUp(State NextState)
 void AnimationStateMachine::OnEnter_JumpUpKick(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_JumpUpKick. PrevState: %s", StateToStr(PrevState), "\n");
+	if (player->currentAnimation == &player->jumpUp)
+	{
+		player->jumpUpKick.Reset();
+		player->currentAnimation = &player->jumpUpKick;
+		player->lastMovementAnimation = player->currentAnimation;
+	}
 }
 
 void AnimationStateMachine::OnUpdate_JumpUpKick()
 {
 	LOG("OnUpdate_JumpUpKick\n");
+	if (player->animationCountdown >= 20) {
+		player->position.y -= 3;
+	}
+	else {
+		player->position.y += 3;
+	}
+	if (player->animationCountdown <= 0) {
+		player->position.y = playerRealY;
+		player->finishedAnimation = true;
+	}
+	else {
+		player->animationCountdown -= 1;
+	}
+	LOG("COUNTDOWN %d", player->animationCountdown);
+	if (player->finishedAnimation) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_JumpUpKick(State NextState)
@@ -258,11 +318,43 @@ void AnimationStateMachine::OnExit_JumpUpKick(State NextState)
 void AnimationStateMachine::OnEnter_JumpForward(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_JumpForward. PrevState: %s", StateToStr(PrevState), "\n");
+	playerRealY = player->position.y;
+	player->finishedAnimation = false;
+	player->animationCountdown = 40;
+	if (player->currentAnimation != &player->jumpForward)
+	{
+		player->jumpForward.Reset();
+		player->currentAnimation = &player->jumpForward;
+		player->lastMovementAnimation = player->currentAnimation;
+	}
 }
 
 void AnimationStateMachine::OnUpdate_JumpForward()
 {
 	LOG("OnUpdate_JumpForward\n");
+	if (player->animationCountdown >= 20) {
+		player->position.y -= 3;
+	}
+	else {
+		player->position.y += 3;
+	}
+	if (player->direction) {
+		player->position.x += 2;
+	}
+	else {
+		player->position.x -= 2;
+	}
+	if (player->animationCountdown <= 0) {
+		player->position.y = playerRealY;
+		player->finishedAnimation = true;
+	}
+	else {
+		player->animationCountdown -= 1;
+	}
+	LOG("COUNTDOWN %d", player->animationCountdown);
+	if (player->finishedAnimation) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_JumpForward(State NextState)
@@ -276,11 +368,40 @@ void AnimationStateMachine::OnExit_JumpForward(State NextState)
 void AnimationStateMachine::OnEnter_JumpForwardKick(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_JumpForwardKick. PrevState: %s", StateToStr(PrevState), "\n");
+	if (player->currentAnimation == &player->jumpForward)
+	{
+		player->jumpForwardKick.Reset();
+		player->currentAnimation = &player->jumpForwardKick;
+		player->lastMovementAnimation = player->currentAnimation;
+	}
 }
 
 void AnimationStateMachine::OnUpdate_JumpForwardKick()
 {
 	LOG("OnUpdate_JumpForwardKick\n");
+	if (player->animationCountdown >= 20) {
+		player->position.y -= 3;
+	}
+	else {
+		player->position.y += 3;
+	}
+	if (player->direction) {
+		player->position.x += 2;
+	}
+	else {
+		player->position.x -= 2;
+	}
+	if (player->animationCountdown <= 0) {
+		player->position.y = playerRealY;
+		player->finishedAnimation = true;
+	}
+	else {
+		player->animationCountdown -= 1;
+	}
+	LOG("COUNTDOWN %d", player->animationCountdown);
+	if (player->finishedAnimation) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_JumpForwardKick(State NextState)
@@ -294,11 +415,25 @@ void AnimationStateMachine::OnExit_JumpForwardKick(State NextState)
 void AnimationStateMachine::OnEnter_Attack1(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_Attack1. PrevState: %s", StateToStr(PrevState), "\n");
+	player->finishedAnimation = false;
+	player->animationCountdown = 18;
+	player->attack1.Reset();
+	player->currentAnimation = &player->attack1;
 }
 
 void AnimationStateMachine::OnUpdate_Attack1()
 {
 	LOG("OnUpdate_Attack1\n");
+	if (player->animationCountdown <= 0) {
+		player->finishedAnimation = true;
+	}
+	else {
+		player->animationCountdown -= 1;
+	}
+	LOG("COUNTDOWN %d", player->animationCountdown);
+	if (player->finishedAnimation) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_Attack1(State NextState)
@@ -312,11 +447,25 @@ void AnimationStateMachine::OnExit_Attack1(State NextState)
 void AnimationStateMachine::OnEnter_Attack2(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_Attack2. PrevState: %s", StateToStr(PrevState), "\n");
+	player->finishedAnimation = false;
+	player->animationCountdown = 20;
+	player->attack2.Reset();
+	player->currentAnimation = &player->attack2;
 }
 
 void AnimationStateMachine::OnUpdate_Attack2()
 {
 	LOG("OnUpdate_Attack2\n");
+	if (player->animationCountdown <= 0) {
+		player->finishedAnimation = true;
+	}
+	else {
+		player->animationCountdown -= 1;
+	}
+	LOG("COUNTDOWN %d", player->animationCountdown);
+	if (player->finishedAnimation) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_Attack2(State NextState)
@@ -330,11 +479,25 @@ void AnimationStateMachine::OnExit_Attack2(State NextState)
 void AnimationStateMachine::OnEnter_Attack3(State PrevState, const EventData* pData)
 {
 	LOG("OnEnter_Attack3. PrevState: %s", StateToStr(PrevState), "\n");
+	player->finishedAnimation = false;
+	player->animationCountdown = 32;
+	player->attack3.Reset();
+	player->currentAnimation = &player->attack3;
 }
 
 void AnimationStateMachine::OnUpdate_Attack3()
 {
 	LOG("OnUpdate_Attack3\n");
+	if (player->animationCountdown <= 0) {
+		player->finishedAnimation = true;
+	}
+	else {
+		player->animationCountdown -= 1;
+	}
+	LOG("COUNTDOWN %d", player->animationCountdown);
+	if (player->finishedAnimation) {
+		Idle();
+	}
 }
 
 void AnimationStateMachine::OnExit_Attack3(State NextState)

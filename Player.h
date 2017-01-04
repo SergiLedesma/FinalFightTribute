@@ -20,16 +20,15 @@ public:
 	bool CleanUp();
 
 public:
-
-	SDL_Texture* graphics = nullptr;
-	Animation* currentAnimation = nullptr;
-	Animation* lastMovementAnimation = nullptr;
-	Collider* collider = nullptr;
-	Animation idle;
-	Animation right;
-	Animation left;
 	Animation attack1;
-	bool blockAnimations = false;
+	Animation attack2;
+	Animation attack3;
+	Animation jumpUp;
+	Animation jumpForward;
+	Animation jumpUpKick;
+	Animation jumpForwardKick;
+	bool finishedAnimation = false;
+	int animationCountdown = NULL;
 	iPoint position;
 	bool destroyed = false;
 	bool direction = true; // true = right, false = left

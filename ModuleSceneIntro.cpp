@@ -17,7 +17,9 @@ ModuleSceneIntro::ModuleSceneIntro(bool active) : Module(active)
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
-{}
+{
+	delete startAnimation;
+}
 
 // Load assets
 bool ModuleSceneIntro::Start()

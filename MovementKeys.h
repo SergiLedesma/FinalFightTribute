@@ -1,4 +1,5 @@
 enum MOVEMENTKEYS {
+	NONE,
 	RIGHT,
 	LEFT,
 	UP,

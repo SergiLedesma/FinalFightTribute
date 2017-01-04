@@ -84,6 +84,6 @@ int main(int argc, char ** argv)
 	}
 
 	RELEASE( App);
-	LOG("Bye :)\n");
+	LOG("Bye Bye :D\n");
 	return main_return;
 }

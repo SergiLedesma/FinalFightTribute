@@ -19,18 +19,20 @@ class AnimationStateMachine : public StateMachine {
 public:
 
 	AnimationStateMachine(Player* player) : StateMachine(ST_COUNT), player(player) {}
-	~AnimationStateMachine() {}
+	~AnimationStateMachine() { RELEASE(player); delete player; RELEASE(data); delete data;  }
 
 	void Update();
 
 	// Supported Events:
 	void Move(MOVEMENTKEYS direction);
-	void Jump();
+	void Jump(MOVEMENTKEYS direction);
 	void Attack();
 	void Idle();
 
 private:
-	Player* player;
+	Player* player = nullptr;
+	AnimationEventData* data = nullptr;
+	int playerRealY;
 
 	// Enumeration of the states:
 	enum EState {
