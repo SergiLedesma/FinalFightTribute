@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
+#include "MovementKeys.h"
 #include <functional>
 
 using namespace std;
@@ -14,7 +15,7 @@ ModuleCollision::ModuleCollision()
 	collisionMatrix[make_pair(CPLAYER, CENEMY_ATTACK)] = true;
 	collisionMatrix[make_pair(CPLAYER_ATTACK, CWALL)] = true;
 	collisionMatrix[make_pair(CPLAYER_ATTACK, CENEMY)] = true;
-	collisionMatrix[make_pair(CPLAYER, CDESTRUCTIBLE)] = true;
+	collisionMatrix[make_pair(CPLAYER_ATTACK, CDESTRUCTIBLE)] = true;
 }
 
 // Destructor
@@ -76,7 +77,7 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, CollisionType type, std::function<void()> onCollision)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, CollisionType type, std::function<void(std::map<MOVEMENTKEY, bool>)> onCollision)
 {
 	Collider* ret = new Collider(rect, onCollision);
 	ret->type = type;
@@ -86,18 +87,35 @@ Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, CollisionType type,
 	return ret;
 }
 
+
 // -----------------------------------------------------
 
 bool Collider::CheckCollision(const Collider& c) const
 {
 	bool ret = false;
 	SDL_Rect r = c.rect;
+	std::map<MOVEMENTKEY, bool> direction = {
+		{RIGHT, true},
+		{LEFT, true},
+		{UP, true},
+		{DOWN, true}
+	};
 
 	if (App->collision->CheckCollidingTypes(type, c.type)) {
-		if ((r.x + r.w < this->rect.x) || (this->rect.x + this->rect.w < r.x)) {
+		if (this->rect.x + this->rect.w < r.x) {
+			direction.at(LEFT) = false;
 			ret = false;
 		}
-		else if ((r.y + r.h < this->rect.y) || (this->rect.y + this->rect.h < r.y)) {
+		else if (r.x + r.w < this->rect.x) {
+			direction.at(RIGHT) = false;
+			ret = false;
+		}
+		else if (this->rect.y + this->rect.h < r.y) {
+			direction.at(UP) = false;
+			ret = false;
+		}
+		else if (r.y + r.h < this->rect.y) {
+			direction.at(DOWN) = false;
 			ret = false;
 		}
 		else {
@@ -105,10 +123,14 @@ bool Collider::CheckCollision(const Collider& c) const
 		}
 	}
 	if (ret == true) {
+		for (int i = DOWN; i = UP; i++) {
+			MOVEMENTKEY current = static_cast<MOVEMENTKEY>(i);
+			direction;
+		}
 		if (this->OnCollision != nullptr)
-			this->OnCollision();
+			this->OnCollision(direction);
 		if (c.OnCollision != nullptr)
-			c.OnCollision();
+			c.OnCollision(direction);
 	}
 
 	return ret;

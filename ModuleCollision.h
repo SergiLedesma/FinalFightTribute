@@ -5,6 +5,7 @@
 #include <map>
 #include <functional>
 #include "Module.h"
+#include "MovementKeys.h"
 
 enum CollisionType {
 	CENEMY,
@@ -20,9 +21,9 @@ struct Collider
 	SDL_Rect rect = { 0,0,0,0 };
 	bool to_delete = false;
 	CollisionType type;
-	std::function<void()> OnCollision;
+	std::function<void(std::map<MOVEMENTKEY, bool>)> OnCollision;
 
-	Collider(SDL_Rect rectangle, std::function<void()> OnCollision) :
+	Collider(SDL_Rect rectangle, std::function<void(std::map<MOVEMENTKEY, bool>)> OnCollision) :
 		rect(rectangle), OnCollision(OnCollision)
 	{
 
@@ -49,7 +50,7 @@ public:
 
 	bool CleanUp();
 
-	Collider * AddCollider(const SDL_Rect & rect, CollisionType type, std::function<void()> onCollision);
+	Collider * AddCollider(const SDL_Rect & rect, CollisionType type, std::function<void(std::map<MOVEMENTKEY, bool>)> onCollision);
 
 	bool CheckCollidingTypes(CollisionType type, CollisionType otherType);
 

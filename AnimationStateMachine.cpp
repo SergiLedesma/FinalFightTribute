@@ -1,9 +1,16 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleCollision.h"
 #include "Player.h"
 #include "AnimationStateMachine.h"
 
+
+AnimationStateMachine::~AnimationStateMachine()
+{
+	RELEASE(player);
+	RELEASE(data);
+}
 
 //-----------------------------------------------------------------------------------------
 // Update of the StateMachine. 
@@ -17,7 +24,7 @@ void AnimationStateMachine::Update()
 //-----------------------------------------------------------------------------------------
 // Event happened. It makes the transition to the corresponding state.
 //-----------------------------------------------------------------------------------------
-void AnimationStateMachine::Move(MOVEMENTKEYS direction)
+void AnimationStateMachine::Move(MOVEMENTKEY direction)
 {
 	data = new AnimationEventData(direction);
 	BEGIN_TRANSITION_MAP							// - Current State -
@@ -41,7 +48,7 @@ void AnimationStateMachine::Move(MOVEMENTKEYS direction)
 //-----------------------------------------------------------------------------------------
 // Event happened. It makes the transition to the corresponding state.
 //-----------------------------------------------------------------------------------------
-void AnimationStateMachine::Jump(MOVEMENTKEYS direction)
+void AnimationStateMachine::Jump(MOVEMENTKEY direction)
 {
 	data = new AnimationEventData(direction);
 	BEGIN_TRANSITION_MAP							// - Current State -
@@ -184,7 +191,7 @@ void AnimationStateMachine::OnEnter_Moving(State PrevState, const EventData* pDa
 		break;
 	case UP:
 		player->position.y -= player->speed;
-		if (player->lastMovementAnimation != nullptr) {
+		if ((player->lastMovementAnimation == &player->left) || (player->lastMovementAnimation == &player->right)) {
 			player->currentAnimation = player->lastMovementAnimation;
 		}
 		else {
@@ -195,7 +202,7 @@ void AnimationStateMachine::OnEnter_Moving(State PrevState, const EventData* pDa
 		break;
 	case DOWN:
 		player->position.y += player->speed;
-		if (player->lastMovementAnimation != nullptr) {
+		if ((player->lastMovementAnimation == &player->left) || (player->lastMovementAnimation == &player->right)) {
 			player->currentAnimation = player->lastMovementAnimation;
 		}
 		else {
@@ -282,6 +289,7 @@ void AnimationStateMachine::OnEnter_JumpUpKick(State PrevState, const EventData*
 		player->jumpUpKick.Reset();
 		player->currentAnimation = &player->jumpUpKick;
 		player->lastMovementAnimation = player->currentAnimation;
+		player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 20, 80 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
 	}
 }
 
@@ -301,7 +309,14 @@ void AnimationStateMachine::OnUpdate_JumpUpKick()
 	else {
 		player->animationCountdown -= 1;
 	}
-	LOG("COUNTDOWN %d", player->animationCountdown);
+	int colliderX = NULL;
+	if (player->direction) {
+		colliderX = player->position.x + player->collider->rect.w;
+	}
+	else {
+		colliderX = player->position.x - player->attackCollider->rect.w;
+	}
+	player->attackCollider->SetPos(colliderX, player->position.y);
 	if (player->finishedAnimation) {
 		Idle();
 	}
@@ -310,6 +325,7 @@ void AnimationStateMachine::OnUpdate_JumpUpKick()
 void AnimationStateMachine::OnExit_JumpUpKick(State NextState)
 {
 	LOG("OnExit_JumpUpKick. NextState: %s", StateToStr(NextState), "\n");
+	player->attackCollider->to_delete = true;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -351,7 +367,6 @@ void AnimationStateMachine::OnUpdate_JumpForward()
 	else {
 		player->animationCountdown -= 1;
 	}
-	LOG("COUNTDOWN %d", player->animationCountdown);
 	if (player->finishedAnimation) {
 		Idle();
 	}
@@ -373,6 +388,7 @@ void AnimationStateMachine::OnEnter_JumpForwardKick(State PrevState, const Event
 		player->jumpForwardKick.Reset();
 		player->currentAnimation = &player->jumpForwardKick;
 		player->lastMovementAnimation = player->currentAnimation;
+		player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 40, 80 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
 	}
 }
 
@@ -398,7 +414,14 @@ void AnimationStateMachine::OnUpdate_JumpForwardKick()
 	else {
 		player->animationCountdown -= 1;
 	}
-	LOG("COUNTDOWN %d", player->animationCountdown);
+	int colliderX = NULL;
+	if (player->direction) {
+		colliderX = player->position.x + player->collider->rect.w;
+	}
+	else {
+		colliderX = player->position.x - player->attackCollider->rect.w;
+	}
+	player->attackCollider->SetPos(colliderX, player->position.y);
 	if (player->finishedAnimation) {
 		Idle();
 	}
@@ -407,6 +430,7 @@ void AnimationStateMachine::OnUpdate_JumpForwardKick()
 void AnimationStateMachine::OnExit_JumpForwardKick(State NextState)
 {
 	LOG("OnExit_JumpForwardKick. NextState: %s", StateToStr(NextState), "\n");
+	player->attackCollider->to_delete = true;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -419,6 +443,7 @@ void AnimationStateMachine::OnEnter_Attack1(State PrevState, const EventData* pD
 	player->animationCountdown = 18;
 	player->attack1.Reset();
 	player->currentAnimation = &player->attack1;
+	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
 }
 
 void AnimationStateMachine::OnUpdate_Attack1()
@@ -430,6 +455,14 @@ void AnimationStateMachine::OnUpdate_Attack1()
 	else {
 		player->animationCountdown -= 1;
 	}
+	int colliderX = NULL;
+	if (player->direction) {
+		colliderX = player->position.x + player->collider->rect.w;
+	}
+	else {
+		colliderX = player->position.x - player->attackCollider->rect.w;
+	}
+	player->attackCollider->SetPos(colliderX, player->position.y);
 	LOG("COUNTDOWN %d", player->animationCountdown);
 	if (player->finishedAnimation) {
 		Idle();
@@ -439,6 +472,7 @@ void AnimationStateMachine::OnUpdate_Attack1()
 void AnimationStateMachine::OnExit_Attack1(State NextState)
 {
 	LOG("OnExit_Attack1. NextState: %s", StateToStr(NextState), "\n");
+	player->attackCollider->to_delete = true;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -451,6 +485,7 @@ void AnimationStateMachine::OnEnter_Attack2(State PrevState, const EventData* pD
 	player->animationCountdown = 20;
 	player->attack2.Reset();
 	player->currentAnimation = &player->attack2;
+	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
 }
 
 void AnimationStateMachine::OnUpdate_Attack2()
@@ -462,6 +497,14 @@ void AnimationStateMachine::OnUpdate_Attack2()
 	else {
 		player->animationCountdown -= 1;
 	}
+	int colliderX = NULL;
+	if (player->direction) {
+		colliderX = player->position.x + player->collider->rect.w;
+	}
+	else {
+		colliderX = player->position.x - player->attackCollider->rect.w;
+	}
+	player->attackCollider->SetPos(colliderX, player->position.y);
 	LOG("COUNTDOWN %d", player->animationCountdown);
 	if (player->finishedAnimation) {
 		Idle();
@@ -471,6 +514,7 @@ void AnimationStateMachine::OnUpdate_Attack2()
 void AnimationStateMachine::OnExit_Attack2(State NextState)
 {
 	LOG("OnExit_Attack2. NextState: %s", StateToStr(NextState), "\n");
+	player->attackCollider->to_delete = true;
 }
 
 //-----------------------------------------------------------------------------------------
@@ -483,6 +527,7 @@ void AnimationStateMachine::OnEnter_Attack3(State PrevState, const EventData* pD
 	player->animationCountdown = 32;
 	player->attack3.Reset();
 	player->currentAnimation = &player->attack3;
+	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
 }
 
 void AnimationStateMachine::OnUpdate_Attack3()
@@ -494,7 +539,14 @@ void AnimationStateMachine::OnUpdate_Attack3()
 	else {
 		player->animationCountdown -= 1;
 	}
-	LOG("COUNTDOWN %d", player->animationCountdown);
+	int colliderX = NULL;
+	if (player->direction) {
+		colliderX = player->position.x + player->collider->rect.w;
+	}
+	else {
+		colliderX = player->position.x - player->attackCollider->rect.w;
+	}
+	player->attackCollider->SetPos(colliderX, player->position.y);
 	if (player->finishedAnimation) {
 		Idle();
 	}
@@ -503,6 +555,7 @@ void AnimationStateMachine::OnUpdate_Attack3()
 void AnimationStateMachine::OnExit_Attack3(State NextState)
 {
 	LOG("OnExit_Attack3. NextState: %s", StateToStr(NextState), "\n");
+	player->attackCollider->to_delete = true;
 }
 
 //-----------------------------------------------------------------------------------------

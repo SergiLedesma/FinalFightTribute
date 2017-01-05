@@ -1,4 +1,5 @@
 #pragma once
+#include <map>
 #include "Creature.h"
 #include "Animation.h"
 #include "Point.h"
@@ -16,7 +17,7 @@ public:
 
 	bool Start();
 	update_status Update();
-	void OnCollision();
+	void OnCollision(std::map<MOVEMENTKEY, bool> direction);
 	bool CleanUp();
 
 public:

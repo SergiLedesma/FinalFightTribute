@@ -111,7 +111,7 @@ bool Player::Start()
 	position.x = 110;
 	position.y = 80;
 	weaponOffset = 25;
-	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&Player::OnCollision, this));
+	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&Player::OnCollision, this, std::placeholders::_1));
 
 	return true;
 }
@@ -203,7 +203,7 @@ update_status Player::Update()
 	return UPDATE_CONTINUE;
 }
 
-void Player::OnCollision() {
+void Player::OnCollision(std::map<MOVEMENTKEY, bool> direction) {
 
 	LOG("Collision on player");
 	/*

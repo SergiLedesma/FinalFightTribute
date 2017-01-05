@@ -8,10 +8,10 @@ class Player;
 
 class AnimationEventData : public EventData {
 public:
-	AnimationEventData(MOVEMENTKEYS direction) : direction(direction) {};
+	AnimationEventData(MOVEMENTKEY direction) : direction(direction) {};
 	virtual ~AnimationEventData() {};
 public:
-	MOVEMENTKEYS direction;
+	MOVEMENTKEY direction;
 };
 
 
@@ -19,13 +19,13 @@ class AnimationStateMachine : public StateMachine {
 public:
 
 	AnimationStateMachine(Player* player) : StateMachine(ST_COUNT), player(player) {}
-	~AnimationStateMachine() { RELEASE(player); delete player; RELEASE(data); delete data;  }
+	~AnimationStateMachine();
 
 	void Update();
 
 	// Supported Events:
-	void Move(MOVEMENTKEYS direction);
-	void Jump(MOVEMENTKEYS direction);
+	void Move(MOVEMENTKEY direction);
+	void Jump(MOVEMENTKEY direction);
 	void Attack();
 	void Idle();
 

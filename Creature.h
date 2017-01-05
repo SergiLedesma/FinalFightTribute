@@ -8,10 +8,10 @@ public:
 	~Creature();
 
 public:
-	SDL_Texture* graphics = nullptr;
 	Animation* currentAnimation = nullptr;
 	Animation* lastMovementAnimation = nullptr;
 	Collider* collider = nullptr;
+	Collider* attackCollider = nullptr;
 	Animation idle;
 	Animation right;
 	Animation left;
