@@ -43,9 +43,7 @@ update_status ModuleCollision::Update()
 {
 	for (std::list<Collider*>::iterator it = colliders.begin(); it != colliders.end(); ++it) {
 		for (std::list<Collider*>::iterator it2 = std::next(it, 1); it2 != colliders.end(); ++it2) {
-			if ((*it)->CheckCollision(**it2)) {
-				LOG("COLLISION!!");
-			}
+			(*it)->CheckCollision(**it2);
 		}
 	}
 
@@ -95,6 +93,72 @@ bool Collider::CheckCollision(const Collider& c) const
 	bool ret = false;
 	SDL_Rect r = c.rect;
 	std::map<MOVEMENTKEY, bool> direction = {
+		{ RIGHT, false },
+		{ LEFT, false },
+		{ UP, false },
+		{ DOWN, false }
+	};
+
+	float w = 0.5 * (this->rect.w + c.rect.w);
+	float h = 0.5 * (this->rect.h + c.rect.h);
+	float dx = (this->rect.x + this->rect.w) - (c.rect.x + c.rect.w);
+	float dy = (this->rect.y + this->rect.h) - (c.rect.y + c.rect.h);
+	if (App->collision->CheckCollidingTypes(type, c.type)) {
+		if (abs(dx) <= w && abs(dy) <= h)
+		{
+			// COLLISION
+			float wy = w * dy;
+			float hx = h * dx;
+
+			ret = true;
+
+			if (wy > hx) {
+				if (wy > -hx) {
+					// COLLISION AT THE BOTTOM
+					direction.at(DOWN) = true;
+				}
+				else
+				{
+					// COLLISION ON THE LEFT
+					direction.at(LEFT) = true;
+				}
+			}
+			else
+			{
+				if (wy > -hx) {
+					// COLLISION ON THE RIGHT
+					direction.at(RIGHT) = true;
+				}
+				else
+				{
+					// COLLISION AT THE TOP
+					direction.at(UP) = true;
+				}
+			}
+
+			if (this->OnCollision != nullptr) {
+				this->OnCollision(direction);
+			}
+			if (c.OnCollision != nullptr) {
+				// invert direction
+				for (auto i : direction) {
+					if (i.second) {
+						i.second = false;
+					}
+					else {
+						i.second = true;
+					}
+				}
+				c.OnCollision(direction);
+			}
+		}
+	}
+
+	return ret;
+	/*
+	bool ret = false;
+	SDL_Rect r = c.rect;
+	std::map<MOVEMENTKEY, bool> direction = {
 		{RIGHT, true},
 		{LEFT, true},
 		{UP, true},
@@ -134,6 +198,7 @@ bool Collider::CheckCollision(const Collider& c) const
 	}
 
 	return ret;
+	*/
 }
 
 bool ModuleCollision::CheckCollidingTypes(CollisionType type, CollisionType otherType) {

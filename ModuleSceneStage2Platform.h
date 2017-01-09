@@ -25,6 +25,7 @@ public:
 	FrameInfo background;
 	FrameInfo train;
 	FrameInfo train2;
+	int walkableSpaceY = 55;
 
 	bool playTrainAnim = false;
 	int tremorOffset = NULL;

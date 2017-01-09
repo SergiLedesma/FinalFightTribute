@@ -35,6 +35,8 @@ public:
 	bool direction = true; // true = right, false = left
 	int weaponOffset;
 	int speed = 1;
+	int capsuleW = 37;
+	int capsuleH = 87;
 
 private:
 	int attackDelay = 20;

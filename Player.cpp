@@ -110,7 +110,6 @@ bool Player::Start()
 	destroyed = false;
 	position.x = 110;
 	position.y = 80;
-	weaponOffset = 25;
 	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&Player::OnCollision, this, std::placeholders::_1));
 
 	return true;
@@ -133,7 +132,10 @@ bool Player::CleanUp()
 update_status Player::Update()
 {
 	Life->Update();
-
+	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_REPEAT)
+	{
+		LOG("%d", App->renderer->camera.y);
+	}
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
 	{
 		App->scene_platform->playTrainAnim = true;

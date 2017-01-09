@@ -7,6 +7,7 @@
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
 #include "EntityManager.h"
+#include "Player.h"
 #include "ModuleSceneStage2Platform.h"
 #include "SDL\include\SDL_render.h"
 
@@ -27,7 +28,12 @@ update_status Destructible::Update() {
 	}
 	else {
 		rect = destroyedRect;
-		position.x += 4;
+		if (animationDirection) {
+			position.x += 4;
+		}
+		else {
+			position.x -= 4;
+		}
 		lifeSpan--;
 	}
 
@@ -41,10 +47,12 @@ update_status Destructible::Update() {
 void Destructible::OnCollision(std::map<MOVEMENTKEY, bool> direction)
 {
 	LOG("Collision on barrel");
-
+	
 	destroyed = true;
 	position.y -= 25;
+	animationDirection = App->scene_platform->player->direction;
 	collider->to_delete = true;
+	
 }
 
 void Destructible::AddCollider() {

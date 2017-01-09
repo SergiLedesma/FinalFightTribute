@@ -15,5 +15,6 @@ public:
 	FrameInfo destroyedRect;
 	FrameInfo nonDestroyedRect;
 	bool destroyed = false;
+	bool animationDirection = true;
 };
 

@@ -32,7 +32,6 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 	bool AddBlit(SDL_Texture * texture, int x, int y, const FrameInfo * section, float speed = 1.0f, bool direction = true, bool isBackground = false);
-	//bool BlitStatic(SDL_Texture * texture, int x, int y, const SDL_Rect * section, float speed = 1.0f);
 	bool Blit(SDL_Texture * texture, int x, int y, const FrameInfo * section, float speed = 1.0f, bool direction = true);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
 
