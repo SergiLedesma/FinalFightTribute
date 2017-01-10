@@ -6,6 +6,7 @@
 #include "ModuleFadeToBlack.h"
 #include "ModuleCollision.h"
 #include "ModuleParticles.h"
+#include "Timer.h"
 
 #include "ModuleSceneIntro.h"
 #include "ModuleSceneStage2Platform.h"
@@ -30,9 +31,11 @@ Application::Application()
 	modules.push_back(manager = new EntityManager(true));
 
 	// Modules to draw on top of game logic
+	modules.push_back(timer = new Timer());
 	modules.push_back(collision = new ModuleCollision());
 	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(fade = new ModuleFadeToBlack());
+
 }
 
 Application::~Application()
@@ -53,6 +56,7 @@ bool Application::Init()
 		if((*it)->IsEnabled() == true)
 			ret = (*it)->Start();
 	}
+	timer->Start();
 
 	// Start the first scene --
 	fade->FadeToBlack(scene_platform, nullptr, 3.0f);
@@ -64,16 +68,16 @@ update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
-		if((*it)->IsEnabled() == true) 
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
+		if ((*it)->IsEnabled() == true)
 			ret = (*it)->PreUpdate();
 
-	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
-		if((*it)->IsEnabled() == true) 
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
+		if ((*it)->IsEnabled() == true)
 			ret = (*it)->Update();
 
-	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
-		if((*it)->IsEnabled() == true) 
+	for (list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
+		if ((*it)->IsEnabled() == true)
 			ret = (*it)->PostUpdate();
 
 	return ret;

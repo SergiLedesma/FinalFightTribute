@@ -50,4 +50,17 @@ typedef unsigned int uint;
 #define VSYNC true
 #define TITLE "Super Awesome Game"
 
+// Controls -----------
+#define GORIGHT SDL_SCANCODE_RIGHT
+#define GOLEFT SDL_SCANCODE_LEFT
+#define GOUP SDL_SCANCODE_UP
+#define GODOWN SDL_SCANCODE_DOWN
+#define JUMP SDL_SCANCODE_Z
+#define ATTACK SDL_SCANCODE_X
+#define PAUSE SDL_SCANCODE_P
+#define CAMERARIGHT SDL_SCANCODE_D
+#define CAMERALEFT SDL_SCANCODE_A
+#define CAMERAUP SDL_SCANCODE_W
+#define CAMERADOWN SDL_SCANCODE_S
+
 #endif //__GLOBALS_H__

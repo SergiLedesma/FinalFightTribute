@@ -52,17 +52,16 @@ update_status ModuleRender::Update()
 {
 	// debug camera
 	int speed = 5;
-
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if(App->input->GetKey(CAMERAUP) == KEY_REPEAT)
 		App->renderer->camera.y += speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	if(App->input->GetKey(CAMERADOWN) == KEY_REPEAT)
 		App->renderer->camera.y -= speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	if(App->input->GetKey(CAMERALEFT) == KEY_REPEAT)
 		App->renderer->camera.x += speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	if(App->input->GetKey(CAMERARIGHT) == KEY_REPEAT)
 		App->renderer->camera.x -= speed;
 	
 	// Sort queue of elements to blit

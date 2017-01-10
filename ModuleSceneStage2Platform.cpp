@@ -8,6 +8,7 @@
 #include "EntityManager.h"
 #include "Destructible.h"
 #include "Barrel.h"
+#include "Trigger.h"
 #include "ModuleSceneStage2Platform.h"
 
 ModuleSceneStage2Platform::ModuleSceneStage2Platform(bool active) : Module(active)
@@ -41,22 +42,28 @@ bool ModuleSceneStage2Platform::Start()
 
 	graphics = App->textures->Load("ff/sprites/Stage2NoBackground.png");
 
-	//App->player->Enable();
 	App->particles->Enable();
 	App->collision->Enable();
 	player = (Player*)App->manager->Create(PLAYER);
 
 	//App->audio->PlayMusic("ff/audio/stage2subway.ogg", 1.0f);
+
+	trigger = (Trigger *)App->manager->Create(TRIGGER);
+	trigger->position.x = 350
+		
+		;
+	trigger->position.y = 0;
+	trigger->collider->SetPos(trigger->position.x, trigger->position.y);
 	
 	barrel1 = (Barrel *)App->manager->Create(BARREL);
 	barrel1->position.x = 200;
 	barrel1->position.y = 120;
-	barrel1->collider->SetPos(200, 120);
+	barrel1->collider->SetPos(barrel1->position.x, barrel1->position.y);
 	
 	barrel2 = (Barrel *)App->manager->Create(BARREL);
 	barrel2->position.x = 250;
 	barrel2->position.y = 100;
-	barrel2->collider->SetPos(250, 100);
+	barrel2->collider->SetPos(barrel2->position.x, barrel2->position.y);
 
 	//App->collision->AddCollider({ 0, 224, 3930, 16 }, WALL, nullptr);
 	
@@ -68,6 +75,7 @@ bool ModuleSceneStage2Platform::CleanUp()
 {
 	LOG("Unloading platform scene");
 
+	trigger->to_delete = true;
 	barrel2->to_delete = true;
 	barrel1->to_delete = true;
 	App->textures->Unload(graphics);

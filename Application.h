@@ -13,6 +13,7 @@ class ModuleAudio;
 class ModuleFadeToBlack;
 class ModuleCollision;
 class ModuleParticles;
+class Timer;
 
 // Game modules ---
 class ModulePlayer;
@@ -40,6 +41,7 @@ public:
 	ModuleFadeToBlack* fade = nullptr;
 	ModuleCollision* collision = nullptr;
 	ModuleParticles* particles = nullptr;
+	Timer* timer = nullptr;
 
 	// Game modules ---
 	ModuleSceneIntro* scene_intro = nullptr;

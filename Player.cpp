@@ -9,6 +9,7 @@
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleSceneStage2Platform.h"
+#include "Timer.h"
 #include "SDL\include\SDL_render.h"
 
 
@@ -132,66 +133,56 @@ bool Player::CleanUp()
 update_status Player::Update()
 {
 	Life->Update();
-	if (App->input->GetKey(SDL_SCANCODE_U) == KEY_REPEAT)
-	{
-		LOG("%d", App->renderer->camera.y);
-	}
-	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT)
-	{
-		App->scene_platform->playTrainAnim = true;
-	}
 
-	if ((App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN) && (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT))
+	if ((App->input->GetKey(JUMP) == KEY_DOWN) && (App->input->GetKey(GORIGHT) == KEY_REPEAT))
 	{
 		Life->Jump(RIGHT);
 	}
+	if ((App->input->GetKey(JUMP) == KEY_DOWN) && (App->input->GetKey(GOLEFT) == KEY_REPEAT))
+	{
+		Life->Jump(LEFT);
+	}
 
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
+	if (App->input->GetKey(GORIGHT) == KEY_REPEAT)
 	{
 		Life->Move(RIGHT);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
+	if (App->input->GetKey(GOLEFT) == KEY_REPEAT)
 	{
 		Life->Move(LEFT);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
+	if (App->input->GetKey(GOUP) == KEY_REPEAT)
 	{
 		Life->Move(UP);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
+	if (App->input->GetKey(GODOWN) == KEY_REPEAT)
 	{
 		Life->Move(DOWN);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+	if (App->input->GetKey(ATTACK) == KEY_DOWN)
 	{
 		Life->Attack();
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (App->input->GetKey(JUMP) == KEY_DOWN)
 	{
 		Life->Jump(NONE);
 	}
 
-
-	/*
-	if ((App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_F) == KEY_IDLE)
-		|| (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT
-			&& App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		|| (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT
-			&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
-		Life->Idle();
+	if (App->input->GetKey(PAUSE) == KEY_DOWN)
+	{
+		if (App->timer->IsPaused()) {
+			App->timer->Unpause();
+		}
+		else {
+			App->timer->Pause();
+		}
 	}
-	*/
 
-	// Draw everything --------------------------------------
 	if (destroyed == false) {
 		App->renderer->AddBlit(graphics, position.x, position.y + App->scene_platform->tremorOffset / 2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
 		collider->SetPos(position.x, position.y);
@@ -208,21 +199,5 @@ update_status Player::Update()
 void Player::OnCollision(std::map<MOVEMENTKEY, bool> direction) {
 
 	LOG("Collision on player");
-	/*
-	int xOffset = 0;
-	int yOffset = 0;
-	int offsetRange = 20;
-
-	App->particles->AddParticle(App->particles->explosion, position.x, position.y);
-
-	srand(time(NULL));
-
-	for (int i = 0; i < 4; i++) {
-		xOffset = rand() % offsetRange - offsetRange;
-		yOffset = rand() % offsetRange - offsetRange;
-		App->particles->AddParticle(App->particles->explosion, position.x + xOffset, position.y + yOffset);
-	}
-	destroyed = true;
-	collider->to_delete = true;
-	*/
+	//LOSE HP
 }

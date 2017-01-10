@@ -7,6 +7,7 @@
 struct SDL_Texture;
 class Barrel;
 class Player;
+class Trigger;
 
 class ModuleSceneStage2Platform : public Module
 {
@@ -39,6 +40,7 @@ private:
 	int baseTrainSpeedDecay = 330;
 	int trainCurrentPosition = 1000;
 	int trainEndPosition = NULL;
+	Trigger *  trigger = nullptr;
 	Barrel *  barrel1 = nullptr;
 	Barrel *  barrel2 = nullptr;
 };

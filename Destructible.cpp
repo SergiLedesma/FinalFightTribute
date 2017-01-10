@@ -1,15 +1,10 @@
 #include "Destructible.h"
 #include "Application.h"
-#include "ModuleTextures.h"
-#include "ModuleInput.h"
-#include "ModuleParticles.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
-#include "EntityManager.h"
 #include "Player.h"
 #include "ModuleSceneStage2Platform.h"
-#include "SDL\include\SDL_render.h"
 
 
 Destructible::Destructible()

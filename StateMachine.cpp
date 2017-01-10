@@ -32,11 +32,11 @@ void StateMachine::OnEvent(State NewState, const EventData* pData)
 	switch (NewState)
 	{
 	case EVENT_IGNORED:
-		LOG("Event ignored.\n");
+		//LOG("Event ignored.\n");
 		break;
 
 	case CANNOT_HAPPEN:
-		LOG("Error: This transition cannot happen.\n");
+		//LOG("Error: This transition cannot happen.\n");
 		break;
 
 	default:

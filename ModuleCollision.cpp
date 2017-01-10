@@ -11,6 +11,7 @@ using namespace std;
 ModuleCollision::ModuleCollision()
 {
 	collisionMatrix[make_pair(CPLAYER, CWALL)] = true;
+	collisionMatrix[make_pair(CPLAYER, CTRIGGER)] = true;
 	collisionMatrix[make_pair(CPLAYER, CENEMY)] = true;
 	collisionMatrix[make_pair(CPLAYER, CENEMY_ATTACK)] = true;
 	collisionMatrix[make_pair(CPLAYER_ATTACK, CWALL)] = true;
@@ -155,50 +156,6 @@ bool Collider::CheckCollision(const Collider& c) const
 	}
 
 	return ret;
-	/*
-	bool ret = false;
-	SDL_Rect r = c.rect;
-	std::map<MOVEMENTKEY, bool> direction = {
-		{RIGHT, true},
-		{LEFT, true},
-		{UP, true},
-		{DOWN, true}
-	};
-
-	if (App->collision->CheckCollidingTypes(type, c.type)) {
-		if (this->rect.x + this->rect.w < r.x) {
-			direction.at(LEFT) = false;
-			ret = false;
-		}
-		else if (r.x + r.w < this->rect.x) {
-			direction.at(RIGHT) = false;
-			ret = false;
-		}
-		else if (this->rect.y + this->rect.h < r.y) {
-			direction.at(UP) = false;
-			ret = false;
-		}
-		else if (r.y + r.h < this->rect.y) {
-			direction.at(DOWN) = false;
-			ret = false;
-		}
-		else {
-			ret = true;
-		}
-	}
-	if (ret == true) {
-		for (int i = DOWN; i = UP; i++) {
-			MOVEMENTKEY current = static_cast<MOVEMENTKEY>(i);
-			direction;
-		}
-		if (this->OnCollision != nullptr)
-			this->OnCollision(direction);
-		if (c.OnCollision != nullptr)
-			c.OnCollision(direction);
-	}
-
-	return ret;
-	*/
 }
 
 bool ModuleCollision::CheckCollidingTypes(CollisionType type, CollisionType otherType) {

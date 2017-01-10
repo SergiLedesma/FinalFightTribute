@@ -16,7 +16,8 @@ enum EntityType {
 	WEAPON,
 	FOOD,
 	SCORE,
-	PARTICLE
+	PARTICLE,
+	TRIGGER
 };
 
 class Entity

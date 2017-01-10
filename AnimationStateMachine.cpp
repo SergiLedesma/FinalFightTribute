@@ -227,14 +227,14 @@ void AnimationStateMachine::OnEnter_Moving(State PrevState, const EventData* pDa
 void AnimationStateMachine::OnUpdate_Moving()
 {
 	// LOG("OnUpdate_Moving\n");
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_W) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_A) == KEY_IDLE
-		&& App->input->GetKey(SDL_SCANCODE_D) == KEY_IDLE
-		|| (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT
-			&& App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
-		|| (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT
-			&& App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)) {
+	if (App->input->GetKey(GODOWN) == KEY_IDLE
+		&& App->input->GetKey(GOUP) == KEY_IDLE
+		&& App->input->GetKey(GOLEFT) == KEY_IDLE
+		&& App->input->GetKey(GORIGHT) == KEY_IDLE
+		|| (App->input->GetKey(GODOWN) == KEY_REPEAT
+			&& App->input->GetKey(GOUP) == KEY_REPEAT)
+		|| (App->input->GetKey(GOLEFT) == KEY_REPEAT
+			&& App->input->GetKey(GORIGHT) == KEY_REPEAT)) {
 		Idle();
 	}
 }

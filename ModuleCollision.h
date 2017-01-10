@@ -13,7 +13,8 @@ enum CollisionType {
 	CWALL,
 	CPLAYER,
 	CPLAYER_ATTACK,
-	CDESTRUCTIBLE
+	CDESTRUCTIBLE,
+	CTRIGGER
 };
 
 struct Collider
