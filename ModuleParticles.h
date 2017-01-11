@@ -29,7 +29,7 @@ struct Particle
 	Particle(const Particle& p);
 	~Particle();
 	bool Update();
-	void OnCollision(std::map<MOVEMENTKEY, bool> direction);
+	void OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType);
 };
 
 class ModuleParticles : public Module

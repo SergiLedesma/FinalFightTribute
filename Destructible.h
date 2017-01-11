@@ -2,6 +2,7 @@
 #include <map>
 #include "Entity.h"
 #include "MovementKeys.h"
+#include "ModuleCollision.h"
 
 class Destructible :
 	public Entity
@@ -10,7 +11,7 @@ public:
 	Destructible();
 	~Destructible();
 	update_status Update();
-	void OnCollision(std::map<MOVEMENTKEY, bool> direction);
+	void OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType);
 	void AddCollider();
 	FrameInfo destroyedRect;
 	FrameInfo nonDestroyedRect;

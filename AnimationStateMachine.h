@@ -35,7 +35,7 @@ private:
 	int playerRealY;
 
 	// Enumeration of the states:
-	enum EState {
+	enum AState {
 #define ANIMATION_STATE(_state, _func) _state,
 #include "AnimationState.h"
 #undef ANIMATION_STATE

@@ -39,7 +39,7 @@ update_status Destructible::Update() {
 	return UPDATE_CONTINUE;
 }
 
-void Destructible::OnCollision(std::map<MOVEMENTKEY, bool> direction)
+void Destructible::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType)
 {
 	LOG("Collision on barrel");
 	
@@ -51,5 +51,5 @@ void Destructible::OnCollision(std::map<MOVEMENTKEY, bool> direction)
 }
 
 void Destructible::AddCollider() {
-	collider = App->collision->AddCollider({ position.x, position.y, rect.frame.w, rect.frame.h }, CDESTRUCTIBLE, std::bind(&Destructible::OnCollision, this, std::placeholders::_1));
+	collider = App->collision->AddCollider({ position.x, position.y, rect.frame.w, rect.frame.h }, CDESTRUCTIBLE, std::bind(&Destructible::OnCollision, this, std::placeholders::_1, std::placeholders::_2));
 }

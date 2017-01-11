@@ -95,7 +95,7 @@ Particle::Particle(const Particle& p)
 	collider = p.collider;
 	if (collider != nullptr) {
 		if (collider->rect.h != 0 && collider->rect.w != 0) {
-			collider = App->collision->AddCollider(p.collider->rect, CPLAYER_ATTACK, std::bind(&Particle::OnCollision, this, std::placeholders::_1));
+			collider = App->collision->AddCollider(p.collider->rect, CPLAYER_ATTACK, std::bind(&Particle::OnCollision, this, std::placeholders::_1, std::placeholders::_2));
 		}
 	}
 }
@@ -126,7 +126,7 @@ bool Particle::Update()
 	return ret;
 }
 
-void Particle::OnCollision(std::map<MOVEMENTKEY, bool> direction) {
+void Particle::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType) {
 	LOG("Collision on particle");
 	App->particles->AddParticle(App->particles->explosion, position.x, position.y);
 	collider->to_delete = true;

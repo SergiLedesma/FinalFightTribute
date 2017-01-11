@@ -34,6 +34,7 @@ public:
 	bool AddBlit(SDL_Texture * texture, int x, int y, const FrameInfo * section, float speed = 1.0f, bool direction = true, bool isBackground = false);
 	bool Blit(SDL_Texture * texture, int x, int y, const FrameInfo * section, float speed = 1.0f, bool direction = true);
 	bool DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uint8 a, bool use_camera = true);
+	void DebugCamera();
 
 public:
 	SDL_Renderer* renderer = nullptr;

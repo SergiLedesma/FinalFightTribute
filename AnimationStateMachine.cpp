@@ -298,7 +298,7 @@ void AnimationStateMachine::OnEnter_JumpUpKick(State PrevState, const EventData*
 		player->jumpUpKick.Reset();
 		player->currentAnimation = &player->jumpUpKick;
 		player->lastMovementAnimation = player->currentAnimation;
-		player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 20, 80 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
+		player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 20, 80 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1, std::placeholders::_2));
 	}
 }
 
@@ -401,7 +401,7 @@ void AnimationStateMachine::OnEnter_JumpForwardKick(State PrevState, const Event
 		player->jumpForwardKick.Reset();
 		player->currentAnimation = &player->jumpForwardKick;
 		player->lastMovementAnimation = player->currentAnimation;
-		player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 40, 80 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
+		player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 40, 80 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1, std::placeholders::_2));
 	}
 }
 
@@ -456,7 +456,7 @@ void AnimationStateMachine::OnEnter_Attack1(State PrevState, const EventData* pD
 	player->animationCountdown = 18;
 	player->attack1.Reset();
 	player->currentAnimation = &player->attack1;
-	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
+	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1, std::placeholders::_2));
 }
 
 void AnimationStateMachine::OnUpdate_Attack1()
@@ -497,7 +497,7 @@ void AnimationStateMachine::OnEnter_Attack2(State PrevState, const EventData* pD
 	player->animationCountdown = 20;
 	player->attack2.Reset();
 	player->currentAnimation = &player->attack2;
-	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
+	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1, std::placeholders::_2));
 }
 
 void AnimationStateMachine::OnUpdate_Attack2()
@@ -538,7 +538,7 @@ void AnimationStateMachine::OnEnter_Attack3(State PrevState, const EventData* pD
 	player->animationCountdown = 32;
 	player->attack3.Reset();
 	player->currentAnimation = &player->attack3;
-	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1));
+	player->attackCollider = App->collision->AddCollider({ player->position.x, player->position.y, 35, 60 }, CPLAYER_ATTACK, std::bind(&Player::OnCollision, player, std::placeholders::_1, std::placeholders::_2));
 }
 
 void AnimationStateMachine::OnUpdate_Attack3()

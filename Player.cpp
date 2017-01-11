@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <time.h>
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleTextures.h"
@@ -11,6 +10,9 @@
 #include "ModuleSceneStage2Platform.h"
 #include "Timer.h"
 #include "SDL\include\SDL_render.h"
+
+
+#include <time.h>
 
 
 Player::Player() {
@@ -58,7 +60,7 @@ Player::Player() {
 	attack3.frames.push_back(FrameInfo({ 476, 423, 40, 104 }, 10, -20));
 	attack3.loop = false;
 	attack3.speed = 0.2f;
-	
+
 	// jumpUp
 	jumpUp.frames.push_back(FrameInfo({ 18, 239, 37, 79 }, 0, 10));
 	jumpUp.frames.push_back(FrameInfo({ 75, 204, 30, 104 }, 0, -10));
@@ -108,10 +110,11 @@ bool Player::Start()
 
 	graphics = App->textures->Load("ff/Sprites/Cody1.png");
 
-	destroyed = false;
 	position.x = 110;
 	position.y = 80;
-	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&Player::OnCollision, this, std::placeholders::_1));
+	maxHp = 1000;
+	currentHp = maxHp;
+	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&Player::OnCollision, this, std::placeholders::_1, std::placeholders::_2));
 
 	return true;
 }
@@ -123,8 +126,12 @@ bool Player::CleanUp()
 
 	App->textures->Unload(graphics);
 
+	RELEASE(currentAnimation);
+	RELEASE(lastMovementAnimation);
+	collider->to_delete = true;
+	attackCollider->to_delete = true;
+
 	RELEASE(Life);
-	delete Life;
 
 	return true;
 }
@@ -133,6 +140,12 @@ bool Player::CleanUp()
 update_status Player::Update()
 {
 	Life->Update();
+
+	LOG("%d", currentHp);
+
+	if (App->input->GetKey(DEBUG) == KEY_DOWN) {
+		debug = !debug;
+	}
 
 	if ((App->input->GetKey(JUMP) == KEY_DOWN) && (App->input->GetKey(GORIGHT) == KEY_REPEAT))
 	{
@@ -183,7 +196,17 @@ update_status Player::Update()
 		}
 	}
 
-	if (destroyed == false) {
+	if (debug) {
+		App->collision->DebugDraw();
+		App->renderer->DebugCamera();
+	}
+	else {
+		if (position.x > (-App->renderer->camera.x + App->renderer->camera.w * 1 / 3) / SCREEN_SIZE) {
+			App->renderer->camera.x = - position.x * SCREEN_SIZE + App->renderer->camera.w * 1 / 3;
+		}
+	}
+
+	if (to_delete == false) {
 		App->renderer->AddBlit(graphics, position.x, position.y + App->scene_platform->tremorOffset / 2, &(currentAnimation->GetCurrentFrame()), 1.0f, direction);
 		collider->SetPos(position.x, position.y);
 	}
@@ -196,8 +219,17 @@ update_status Player::Update()
 	return UPDATE_CONTINUE;
 }
 
-void Player::OnCollision(std::map<MOVEMENTKEY, bool> direction) {
+void Player::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType) {
 
 	LOG("Collision on player");
-	//LOSE HP
+	switch (otherType) {
+	case CENEMY_ATTACK:
+		TakeDamage(1);
+	}
+}
+
+void Player::Die() {
+	// Game Over -> Restart
+	to_delete = true;
+	collider->to_delete = true;
 }

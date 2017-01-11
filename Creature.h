@@ -7,6 +7,9 @@ public:
 	Creature();
 	~Creature();
 
+	void TakeDamage(int damage);
+	virtual void Die() {};
+
 public:
 	Animation* currentAnimation = nullptr;
 	Animation* lastMovementAnimation = nullptr;
@@ -15,5 +18,12 @@ public:
 	Animation idle;
 	Animation right;
 	Animation left;
+	bool finishedAnimation = false;
+	int animationCountdown = NULL;
+	iPoint position;
+
+protected:
+	int maxHp = 10000;
+	int currentHp = 10000;
 };
 

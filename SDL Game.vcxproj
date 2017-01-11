@@ -77,6 +77,9 @@
     <ClInclude Include="Creature.h" />
     <ClInclude Include="Destructible.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyState.h" />
+    <ClInclude Include="EnemyStateMachine.h" />
+    <ClInclude Include="EnemyTrigger.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EventData.h" />
@@ -102,6 +105,7 @@
     <ClInclude Include="Score.h" />
     <ClInclude Include="StateMachine.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TrainTrigger.h" />
     <ClInclude Include="Trigger.h" />
     <ClInclude Include="Weapon.h" />
   </ItemGroup>
@@ -112,6 +116,8 @@
     <ClCompile Include="Creature.cpp" />
     <ClCompile Include="Destructible.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyStateMachine.cpp" />
+    <ClCompile Include="EnemyTrigger.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Food.cpp" />
@@ -133,6 +139,7 @@
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="StateMachine.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TrainTrigger.cpp" />
     <ClCompile Include="Trigger.cpp" />
     <ClCompile Include="Weapon.cpp" />
   </ItemGroup>

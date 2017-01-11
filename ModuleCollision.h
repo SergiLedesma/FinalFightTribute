@@ -22,9 +22,9 @@ struct Collider
 	SDL_Rect rect = { 0,0,0,0 };
 	bool to_delete = false;
 	CollisionType type;
-	std::function<void(std::map<MOVEMENTKEY, bool>)> OnCollision;
+	std::function<void(std::map<MOVEMENTKEY, bool>, CollisionType)> OnCollision;
 
-	Collider(SDL_Rect rectangle, std::function<void(std::map<MOVEMENTKEY, bool>)> OnCollision) :
+	Collider(SDL_Rect rectangle, std::function<void(std::map<MOVEMENTKEY, bool>, CollisionType)> OnCollision) :
 		rect(rectangle), OnCollision(OnCollision)
 	{
 
@@ -51,7 +51,7 @@ public:
 
 	bool CleanUp();
 
-	Collider * AddCollider(const SDL_Rect & rect, CollisionType type, std::function<void(std::map<MOVEMENTKEY, bool>)> onCollision);
+	Collider * AddCollider(const SDL_Rect & rect, CollisionType type, std::function<void(std::map<MOVEMENTKEY, bool>, CollisionType)> onCollision);
 
 	bool CheckCollidingTypes(CollisionType type, CollisionType otherType);
 
@@ -61,7 +61,6 @@ private:
 
 	std::map<std::pair<CollisionType, CollisionType>, bool> collisionMatrix;
 	std::list<Collider*> colliders;
-	bool debug = false;
 };
 
 #endif // __ModuleCollision_H__

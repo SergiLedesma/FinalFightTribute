@@ -3,6 +3,7 @@
 #include "ModuleRender.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
+#include "ModuleCollision.h"
 #include "Animation.h"
 #include "SDL/include/SDL.h"
 
@@ -49,21 +50,7 @@ update_status ModuleRender::PreUpdate()
 
 // Called every draw update
 update_status ModuleRender::Update()
-{
-	// debug camera
-	int speed = 5;
-	if(App->input->GetKey(CAMERAUP) == KEY_REPEAT)
-		App->renderer->camera.y += speed;
-
-	if(App->input->GetKey(CAMERADOWN) == KEY_REPEAT)
-		App->renderer->camera.y -= speed;
-
-	if(App->input->GetKey(CAMERALEFT) == KEY_REPEAT)
-		App->renderer->camera.x += speed;
-
-	if(App->input->GetKey(CAMERARIGHT) == KEY_REPEAT)
-		App->renderer->camera.x -= speed;
-	
+{	
 	// Sort queue of elements to blit
 	blitList.sort([](BlitInfo const a, BlitInfo const b) { return a.z < b.z;});
 	
@@ -103,9 +90,9 @@ bool ModuleRender::AddBlit(SDL_Texture* texture, int x, int y, const FrameInfo* 
 	currentBlit.texture = texture;
 	currentBlit.x = x;
 	currentBlit.y = y;
-	currentBlit.section = section;
 	currentBlit.speed = speed;
 	currentBlit.direction = direction;
+	currentBlit.section = section;
 	if (!isBackground) {
 		currentBlit.z = y + section->frame.h;
 	}
@@ -125,7 +112,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const FrameInfo* sec
 	bool ret = true;
 	SDL_Rect rect;
 
-	if(section != NULL)
+	if(section != nullptr)
 	{
 		rect.w = section->frame.w;
 		rect.h = section->frame.h;
@@ -137,7 +124,9 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const FrameInfo* sec
 
 	rect.w *= SCREEN_SIZE;
 	rect.h *= SCREEN_SIZE;
-	rect.y = (int)(camera.y * speed) + (y + section->yOffset) * SCREEN_SIZE;
+	if (section != nullptr) {
+		rect.y = (int)(camera.y * speed) + (y + section->yOffset) * SCREEN_SIZE;
+	}
 	if (direction) {
 		rect.x = (int)(camera.x * speed) + x * SCREEN_SIZE;
 		if (SDL_RenderCopy(renderer, texture, &section->frame, &rect) != 0)
@@ -180,4 +169,22 @@ bool ModuleRender::DrawQuad(const SDL_Rect& rect, Uint8 r, Uint8 g, Uint8 b, Uin
 	}
 
 	return ret;
+}
+
+void ModuleRender::DebugCamera()
+{
+	int speed = 5;
+	/*
+	if (App->input->GetKey(CAMERAUP) == KEY_REPEAT)
+		App->renderer->camera.y += speed;
+
+	if (App->input->GetKey(CAMERADOWN) == KEY_REPEAT)
+		App->renderer->camera.y -= speed;
+		*/
+
+	if (App->input->GetKey(CAMERALEFT) == KEY_REPEAT)
+		App->renderer->camera.x += speed;
+
+	if (App->input->GetKey(CAMERARIGHT) == KEY_REPEAT)
+		App->renderer->camera.x -= speed;
 }

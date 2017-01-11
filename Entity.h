@@ -17,7 +17,8 @@ enum EntityType {
 	FOOD,
 	SCORE,
 	PARTICLE,
-	TRIGGER
+	TTRIGGER,
+	ETRIGGER
 };
 
 class Entity

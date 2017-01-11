@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <time.h>
 #include "Application.h"
 #include "Globals.h"
 #include "SDL/include/SDL.h"
@@ -22,6 +23,7 @@ int main(int argc, char ** argv)
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
+	srand(time(NULL));
 
 	while (state != MAIN_EXIT)
 	{

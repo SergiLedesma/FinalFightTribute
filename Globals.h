@@ -62,5 +62,6 @@ typedef unsigned int uint;
 #define CAMERALEFT SDL_SCANCODE_A
 #define CAMERAUP SDL_SCANCODE_W
 #define CAMERADOWN SDL_SCANCODE_S
+#define DEBUG SDL_SCANCODE_F1
 
 #endif //__GLOBALS_H__

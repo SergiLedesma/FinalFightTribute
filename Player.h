@@ -4,6 +4,7 @@
 #include "Animation.h"
 #include "Point.h"
 #include "AnimationStateMachine.h"
+#include "ModuleCollision.h"
 
 struct SDL_Texture;
 struct Collider;
@@ -16,9 +17,11 @@ public:
 	~Player();
 
 	bool Start();
-	update_status Update();
-	void OnCollision(std::map<MOVEMENTKEY, bool> direction);
 	bool CleanUp();
+	update_status Update();
+	void OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType);
+	void Die();
+	bool GetDebugMode() { return debug; };
 
 public:
 	Animation attack1;
@@ -28,12 +31,7 @@ public:
 	Animation jumpForward;
 	Animation jumpUpKick;
 	Animation jumpForwardKick;
-	bool finishedAnimation = false;
-	int animationCountdown = NULL;
-	iPoint position;
-	bool destroyed = false;
 	bool direction = true; // true = right, false = left
-	int weaponOffset;
 	int speed = 1;
 	int capsuleW = 37;
 	int capsuleH = 87;
@@ -41,5 +39,6 @@ public:
 private:
 	int attackDelay = 20;
 	AnimationStateMachine* Life;
+	bool debug = false;
 };
 

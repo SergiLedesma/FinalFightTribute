@@ -1,8 +1,6 @@
 #include "Trigger.h"
 #include "Application.h"
 #include "ModuleCollision.h"
-#include "EntityManager.h"
-#include "ModuleSceneStage2Platform.h"
 
 
 
@@ -23,14 +21,14 @@ bool Trigger::Start() {
 	return true;
 }
 
-void Trigger::OnCollision(std::map<MOVEMENTKEY, bool> direction)
+void Trigger::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType)
 {
 	LOG("Collision on trigger");
-	App->scene_platform->playTrainAnim = true;
+	Shot();
 	to_delete = true;
 	collider->to_delete = true;
 }
 
 void Trigger::AddCollider() {
-	collider = App->collision->AddCollider({ position.x, position.y, rect.frame.w, rect.frame.h }, CTRIGGER, std::bind(&Trigger::OnCollision, this, std::placeholders::_1));
+	collider = App->collision->AddCollider({ position.x, position.y, rect.frame.w, rect.frame.h }, CTRIGGER, std::bind(&Trigger::OnCollision, this, std::placeholders::_1, std::placeholders::_2));
 }

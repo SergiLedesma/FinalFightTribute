@@ -12,7 +12,6 @@ ModuleCollision::ModuleCollision()
 {
 	collisionMatrix[make_pair(CPLAYER, CWALL)] = true;
 	collisionMatrix[make_pair(CPLAYER, CTRIGGER)] = true;
-	collisionMatrix[make_pair(CPLAYER, CENEMY)] = true;
 	collisionMatrix[make_pair(CPLAYER, CENEMY_ATTACK)] = true;
 	collisionMatrix[make_pair(CPLAYER_ATTACK, CWALL)] = true;
 	collisionMatrix[make_pair(CPLAYER_ATTACK, CENEMY)] = true;
@@ -48,12 +47,6 @@ update_status ModuleCollision::Update()
 		}
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		debug = !debug;
-
-	if (debug == true)
-		DebugDraw();
-
 	return UPDATE_CONTINUE;
 }
 
@@ -76,7 +69,7 @@ bool ModuleCollision::CleanUp()
 	return true;
 }
 
-Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, CollisionType type, std::function<void(std::map<MOVEMENTKEY, bool>)> onCollision)
+Collider* ModuleCollision::AddCollider(const SDL_Rect& rect, CollisionType type, std::function<void(std::map<MOVEMENTKEY, bool>, CollisionType)> onCollision)
 {
 	Collider* ret = new Collider(rect, onCollision);
 	ret->type = type;
@@ -99,7 +92,7 @@ bool Collider::CheckCollision(const Collider& c) const
 		{ UP, false },
 		{ DOWN, false }
 	};
-
+	
 	float w = 0.5 * (this->rect.w + c.rect.w);
 	float h = 0.5 * (this->rect.h + c.rect.h);
 	float dx = (this->rect.x + this->rect.w) - (c.rect.x + c.rect.w);
@@ -138,7 +131,7 @@ bool Collider::CheckCollision(const Collider& c) const
 			}
 
 			if (this->OnCollision != nullptr) {
-				this->OnCollision(direction);
+				this->OnCollision(direction, c.type);
 			}
 			if (c.OnCollision != nullptr) {
 				// invert direction
@@ -150,7 +143,7 @@ bool Collider::CheckCollision(const Collider& c) const
 						i.second = true;
 					}
 				}
-				c.OnCollision(direction);
+				c.OnCollision(direction, this->type);
 			}
 		}
 	}

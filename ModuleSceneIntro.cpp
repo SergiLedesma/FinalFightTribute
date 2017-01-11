@@ -26,12 +26,12 @@ bool ModuleSceneIntro::Start()
 {
 	LOG("Loading space intro");
 
-	background = App->textures->Load("ff/sprites/intro.png");
+	background = App->textures->Load("ff/Sprites/intro.png");
 	graphics = App->textures->Load("ff/Sprites/start.png");
 
-	App->audio->PlayMusic("ff/audio/intro.ogg", 1.0f);
+	App->audio->PlayMusic("ff/Audio/intro.ogg", 1.0f);
 	if (fx == 0)
-		fx = App->audio->LoadFx("ff/sounds/song004.wav");
+		fx = App->audio->LoadFx("ff/Audio/sounds/song004.wav");
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
@@ -53,7 +53,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	App->renderer->AddBlit(background, 0, -16, NULL);
+	//FrameInfo * a = &FrameInfo({0,0,SCREEN_WIDTH,SCREEN_HEIGHT});
+	App->renderer->AddBlit(background, 0, 0, nullptr, 1, true, true);
 	App->renderer->AddBlit(graphics, SCREEN_WIDTH / 2 - (startAnimation->GetCurrentFrame().frame.w/2), SCREEN_HEIGHT - SCREEN_HEIGHT/2.5, &(startAnimation->GetCurrentFrame()));
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->fade->isFading() == false)

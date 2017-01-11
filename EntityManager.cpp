@@ -7,7 +7,8 @@
 #include "Weapon.h"
 #include "Food.h"
 #include "Score.h"
-#include "Trigger.h"
+#include "TrainTrigger.h"
+#include "EnemyTrigger.h"
 
 EntityManager::EntityManager(bool active) : Module(active)
 {
@@ -75,8 +76,11 @@ Entity * EntityManager::Create(EntityType type)
 	case BARREL:
 		newEntity = new Barrel();
 		break;
-	case TRIGGER:
-		newEntity = new Trigger();
+	case TTRIGGER:
+		newEntity = new TrainTrigger();
+		break;
+	case ETRIGGER:
+		newEntity = new EnemyTrigger();
 		break;
 	case WEAPON:
 		newEntity = new Weapon();

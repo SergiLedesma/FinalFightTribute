@@ -59,7 +59,7 @@ bool Application::Init()
 	timer->Start();
 
 	// Start the first scene --
-	fade->FadeToBlack(scene_platform, nullptr, 3.0f);
+	fade->FadeToBlack(scene_intro, nullptr, 3.0f);
 
 	return ret;
 }
