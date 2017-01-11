@@ -17,6 +17,8 @@ public:
 	uint fxPunch2 = 0;
 	uint fxPunch3 = 0;
 	uint fxPunch4 = 0;
+	uint opening = 0;
+	uint fxBarrel = 0;
 };
 
 #endif //__FxLibrary_H__

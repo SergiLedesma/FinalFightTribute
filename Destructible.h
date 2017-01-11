@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __DESTRUCTIBLE_H__
+#define __DESTRUCTIBLE_H__
+
 #include <map>
 #include "Entity.h"
 #include "MovementKeys.h"
@@ -19,3 +21,4 @@ public:
 	bool animationDirection = true;
 };
 
+#endif // __DESTRUCTIBLE_H__

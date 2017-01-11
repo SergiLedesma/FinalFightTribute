@@ -15,9 +15,12 @@ Creature::~Creature()
 
 void Creature::TakeDamage(int damage)
 {
-	currentHp -= damage;
-	LOG("%d", currentHp);
-	if (currentHp <= 0) {
-		Die();
+	if (currentHp > 0) {
+		currentHp -= damage;
+		LOG("%d", currentHp);
+		if (currentHp <= 0) {
+			currentHp = 0;
+			Die();
+		}
 	}
 }

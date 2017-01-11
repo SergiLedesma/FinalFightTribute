@@ -1,6 +1,7 @@
 #ifndef __EntityManager_H__
 #define __EntityManager_H__
 
+#include <map>
 #include "Module.h"
 #include "Entity.h"
 
@@ -19,8 +20,10 @@ public:
 
 	Entity * Create(EntityType type);
 
+	int Find(EntityType type);
+
 private:
-	std::list<Entity*> entityList;
+	std::map<Entity*, EntityType> entities;
 };
 
 #endif //__EntityManager_H__

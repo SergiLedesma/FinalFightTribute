@@ -4,7 +4,6 @@
 #include "ModuleAudio.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
-#include "ModuleParticles.h"
 #include "EntityManager.h"
 #include "Destructible.h"
 #include "Barrel.h"
@@ -54,52 +53,56 @@ bool ModuleSceneStage2Platform::Start()
 	if (trainArrival == 0)
 		trainArrival = App->audio->LoadFx("ff/Audio/sounds/train001.wav");
 
-	App->particles->Enable();
 	App->collision->Enable();
 
 	App->audio->PlayMusic("ff/audio/stage2subway.ogg", 1.0f);
 
 	player = (Player*)App->manager->Create(PLAYER);
 
-	trigger = (Trigger *)App->manager->Create(TTRIGGER);
+	trigger = (Trigger *)App->manager->Create(TRAINTRIGGER);
 	trigger->position.x = 350;
 	trigger->position.y = 0;
 	trigger->collider->SetPos(trigger->position.x, trigger->position.y);
 
-	trigger2 = (Trigger *)App->manager->Create(ETRIGGER);
+	trigger2 = (Trigger *)App->manager->Create(ENEMYTRIGGER);
 	trigger2->position.x = 200;
 	trigger2->position.y = 0;
 	trigger2->collider->SetPos(trigger2->position.x, trigger2->position.y);
 
-	trigger3 = (Trigger *)App->manager->Create(ETRIGGER);
-	trigger3->position.x = 200;
+	trigger3 = (Trigger *)App->manager->Create(ENEMYTRIGGER);
+	trigger3->position.x = 220;
 	trigger3->position.y = 0;
 	trigger3->collider->SetPos(trigger3->position.x, trigger3->position.y);
 
-	trigger4 = (Trigger *)App->manager->Create(ETRIGGER);
-	trigger4->position.x = 500;
+	trigger4 = (Trigger *)App->manager->Create(ENEMYTRIGGER);
+	trigger4->position.x = 490;
 	trigger4->position.y = 0;
 	trigger4->collider->SetPos(trigger4->position.x, trigger4->position.y);
 
-	trigger5 = (Trigger *)App->manager->Create(ETRIGGER);
+	trigger5 = (Trigger *)App->manager->Create(ENEMYTRIGGER);
 	trigger5->position.x = 500;
 	trigger5->position.y = 0;
 	trigger5->collider->SetPos(trigger5->position.x, trigger5->position.y);
 
-	trigger6 = (Trigger *)App->manager->Create(ETRIGGER);
-	trigger6->position.x = 800;
+	trigger6 = (Trigger *)App->manager->Create(ENEMYTRIGGER);
+	trigger6->position.x = 740;
 	trigger6->position.y = 0;
 	trigger6->collider->SetPos(trigger6->position.x, trigger6->position.y);
 
-	trigger7 = (Trigger *)App->manager->Create(ETRIGGER);
-	trigger7->position.x = 800;
+	trigger7 = (Trigger *)App->manager->Create(ENEMYTRIGGER);
+	trigger7->position.x = 750;
 	trigger7->position.y = 0;
 	trigger7->collider->SetPos(trigger7->position.x, trigger7->position.y);
 
-	trigger8 = (Trigger *)App->manager->Create(ETRIGGER);
-	trigger8->position.x = 800;
+	trigger8 = (Trigger *)App->manager->Create(ENEMYTRIGGER);
+	trigger8->position.x = 760;
 	trigger8->position.y = 0;
 	trigger8->collider->SetPos(trigger8->position.x, trigger8->position.y);
+
+	endingTrigger = (Trigger *)App->manager->Create(ENDINGTRIGGER);
+	endingTrigger->position.x = 780;
+	endingTrigger->position.y = 0;
+	endingTrigger->collider->SetPos(endingTrigger->position.x, endingTrigger->position.y);
 	
 	barrel1 = (Barrel *)App->manager->Create(BARREL);
 	barrel1->position.x = 400;
@@ -111,12 +114,10 @@ bool ModuleSceneStage2Platform::Start()
 	barrel2->position.y = 100;
 	barrel2->collider->SetPos(barrel2->position.x, barrel2->position.y);
 
-	barrel2 = (Barrel *)App->manager->Create(BARREL);
-	barrel2->position.x = 500;
-	barrel2->position.y = 100;
-	barrel2->collider->SetPos(barrel2->position.x, barrel2->position.y);
-
-	//App->collision->AddCollider({ 0, 224, 3930, 16 }, WALL, nullptr);
+	barrel3 = (Barrel *)App->manager->Create(BARREL);
+	barrel3->position.x = 850;
+	barrel3->position.y = 110;
+	barrel3->collider->SetPos(barrel3->position.x, barrel3->position.y);
 	
 	return true;
 }
@@ -125,16 +126,8 @@ bool ModuleSceneStage2Platform::Start()
 bool ModuleSceneStage2Platform::CleanUp()
 {
 	LOG("Unloading platform scene");
-	for (Enemy* iter : enemies) {
-		iter->to_delete = true;
-	}
-	trigger->to_delete = true;
-	barrel2->to_delete = true;
-	barrel1->to_delete = true;
-	player->to_delete = true;
 	App->textures->Unload(graphics);
 	App->collision->Disable();
-	App->particles->Disable();
 
 	return true;
 }
@@ -142,21 +135,18 @@ bool ModuleSceneStage2Platform::CleanUp()
 // Update: draw background
 update_status ModuleSceneStage2Platform::Update()
 {
-	if (trigger2->to_delete == true) {
-		int i = 0;
-		for (list<Enemy*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
-			if (!(*it)->to_delete) {
-				i++;
-			}
-		}
-		if (i == 0) {
+	if (ending) {
+		App->scene_platform->player->lockCamera = true;
+		int i = App->manager->Find(ENEMY);
+		if (i == 0 && App->fade->isFading() == false) {
 			LOG("YOU WIN");
+			App->fade->FadeToBlack((Module*)App->scene_ending, this, 3.0f);
 		}
 	}
 
-	if (player->to_delete) {
+	if (player->to_delete && App->fade->isFading() == false) {
 		LOG("YOU LOSE");
-		return UPDATE_RESTART;
+		App->fade->FadeToBlack((Module*)App->scene_over, this, 3.0f);
 	}
 	// Move camera forward -----------------------------
 	int scroll_speed = 1;
@@ -215,6 +205,5 @@ bool ModuleSceneStage2Platform::SpawnEnemy(int x, int y) {
 	Enemy* enemy = (Enemy *)App->manager->Create(ENEMY);
 	enemy->position.x = x;
 	enemy->position.y = y;
-	enemies.push_back(enemy);
 	return true;
 }

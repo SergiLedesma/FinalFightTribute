@@ -113,7 +113,7 @@ bool Player::Start()
 
 	position.x = 110;
 	position.y = 80;
-	maxHp = 1000;
+	maxHp = 200;
 	currentHp = maxHp;
 	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CPLAYER, std::bind(&Player::OnCollision, this, std::placeholders::_1, std::placeholders::_2));
 
@@ -127,11 +127,14 @@ bool Player::CleanUp()
 
 	App->textures->Unload(graphics);
 
+	to_delete = true;
+	if (collider != nullptr) {
+		collider->to_delete = true;
+	}
+	if (attackCollider != nullptr) {
+		attackCollider->to_delete = true;
+	}
 	RELEASE(Life);
-	RELEASE(currentAnimation);
-	RELEASE(lastMovementAnimation);
-	collider->to_delete = true;
-	attackCollider->to_delete = true;
 
 	return true;
 }
@@ -204,7 +207,7 @@ update_status Player::Update()
 		App->renderer->DebugCamera();
 	}
 	else {
-		if (position.x > (-App->renderer->camera.x + App->renderer->camera.w * 1 / 3) / SCREEN_SIZE) {
+		if (!lockCamera && (position.x > (-App->renderer->camera.x + App->renderer->camera.w * 1 / 3) / SCREEN_SIZE)) {
 			App->renderer->camera.x = - position.x * SCREEN_SIZE + App->renderer->camera.w * 1 / 3;
 		}
 	}
@@ -248,8 +251,5 @@ void Player::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType ot
 }
 
 void Player::Die() {
-	// Game Over -> Restart
 	to_delete = true;
-	collider->to_delete = true;
-	attackCollider->to_delete = true;
 }

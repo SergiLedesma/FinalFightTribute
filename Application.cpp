@@ -5,12 +5,13 @@
 #include "ModuleAudio.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleCollision.h"
-#include "ModuleParticles.h"
 #include "Timer.h"
 
 #include "ModuleScenePreIntro.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleSceneStage2Platform.h"
+#include "ModuleSceneEnding.h"
+#include "ModuleSceneGameOver.h"
 #include "EntityManager.h"
 #include "FxLibrary.h"
 #include "Application.h"
@@ -32,12 +33,13 @@ Application::Application()
 	modules.push_back(scene_preintro = new ModuleScenePreIntro(false));
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
 	modules.push_back(scene_platform = new ModuleSceneStage2Platform(false));
+	modules.push_back(scene_ending = new ModuleSceneEnding(false));
+	modules.push_back(scene_over = new ModuleSceneGameOver(false));
 	modules.push_back(manager = new EntityManager(true));
-
+	
 	// Modules to draw on top of game logic
 	modules.push_back(timer = new Timer());
 	modules.push_back(collision = new ModuleCollision());
-	modules.push_back(particles = new ModuleParticles());
 	modules.push_back(fade = new ModuleFadeToBlack());
 
 }

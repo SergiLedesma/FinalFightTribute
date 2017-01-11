@@ -34,6 +34,8 @@ public:
 	bool playTrainAnim = false;
 	int tremorOffset = NULL;
 
+	bool ending = false;
+
 	Player* player = nullptr;
 
 private:
@@ -43,17 +45,18 @@ private:
 	int baseTrainSpeedDecay = 330;
 	int trainCurrentPosition = 1000;
 	int trainEndPosition = NULL;
-	Trigger *  trigger = nullptr;
-	Trigger *  trigger2 = nullptr;
-	Trigger *  trigger3 = nullptr;
-	Trigger *  trigger4 = nullptr;
-	Trigger *  trigger5 = nullptr;
-	Trigger *  trigger6 = nullptr;
-	Trigger *  trigger7 = nullptr;
-	Trigger *  trigger8 = nullptr;
-	Barrel *  barrel1 = nullptr;
-	Barrel *  barrel2 = nullptr;
-	list<Enemy*> enemies;
+	Trigger * trigger = nullptr;
+	Trigger * trigger2 = nullptr;
+	Trigger * trigger3 = nullptr;
+	Trigger * trigger4 = nullptr;
+	Trigger * trigger5 = nullptr;
+	Trigger * trigger6 = nullptr;
+	Trigger * trigger7 = nullptr;
+	Trigger * trigger8 = nullptr;
+	Trigger * endingTrigger = nullptr;
+	Barrel * barrel1 = nullptr;
+	Barrel * barrel2 = nullptr;
+	Barrel * barrel3 = nullptr;
 
 };
 

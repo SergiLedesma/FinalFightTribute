@@ -1,37 +1,19 @@
-## Welcome to GitHub Pages
+### Final Fight Tribute
+My name is Sergi Ledesma and I'm currently studying a Master's Degree on Videogame Development. Recently I received an assignment, coding in C++ and SDL a tribute to an old-school arcade Beat 'em up: Final Fight (SNES version). Even though I had not much time during christmas, after a few weeks of work here it is the result.
 
-You can use the [editor on GitHub](https://github.com/SergiLedesma/FinalFightTribute/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+In this game you'll have to cross the subway platform defeating the enemies aproaching and trying not to die. To play you'll be able to walk (ARROW KEYS), jump (Z) and attack (X). Combining those actions you'll be able to jump up, forward, and attack during those animations performing a flying kick.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Currently there is one type of player character (Cody), one type of enemy (Dug) and one scene, the first one from the second stage (subway platform). The main character and the enemy have movement and attack animations managed with a state machine, a collision module has been implemented to handle combat and trigger boxes and the camera follows the player like in the real game.
 
-### Markdown
+You can see the demo here:
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+[![Final Fight Tribute](http://img.youtube.com/vi/uzHt50H2_d0/0.jpg)](https://youtu.be/uzHt50H2_d0 "Final Fight Tribute")
 
-```markdown
-Syntax highlighted code block
+### Download
+If you liked it and want to try it you can download the current release version **[here](https://github.com/SergiLedesma/FinalFightTribute/releases/download/1.0/FinalFightTribute-SergiLedesma.zip)**.
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/SergiLedesma/FinalFightTribute/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### Author
+Sergi Ledesma Sánchez
+<br> Contact: sergi.dev@gmail.com
+<br> Check out the full project at https://github.com/SergiLedesma
+<br> Project License: GNU GENERAL PUBLIC LICENSE 3.0

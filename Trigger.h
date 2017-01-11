@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __TRIGGER_H__
+#define __TRIGGER_H__
+
 #include <map>
 #include "Entity.h"
 #include "MovementKeys.h"
@@ -16,3 +18,4 @@ public:
 	virtual void Shot() {};
 };
 
+#endif // __TRIGGER_H__

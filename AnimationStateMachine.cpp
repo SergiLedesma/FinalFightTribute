@@ -10,7 +10,6 @@
 
 AnimationStateMachine::~AnimationStateMachine()
 {
-	RELEASE(player);
 	RELEASE(data);
 }
 

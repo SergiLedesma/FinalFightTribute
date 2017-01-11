@@ -10,7 +10,6 @@
 
 EnemyStateMachine::~EnemyStateMachine()
 {
-	RELEASE(enemy);
 	RELEASE(data);
 }
 

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __TIMER_H__
+#define __TIMER_H__
+
 #include "Module.h"
 
 class Timer : public Module
@@ -22,3 +24,5 @@ private:
 	bool paused = false;
 	bool started = false;
 };
+
+#endif // __TIMER_H__

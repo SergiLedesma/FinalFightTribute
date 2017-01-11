@@ -53,7 +53,6 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	//FrameInfo * a = &FrameInfo({0,0,SCREEN_WIDTH,SCREEN_HEIGHT});
 	App->renderer->AddBlit(background, 0, 0, nullptr, 1, true, true);
 	App->renderer->AddBlit(graphics, SCREEN_WIDTH / 2 - (startAnimation->GetCurrentFrame().frame.w/2), SCREEN_HEIGHT - SCREEN_HEIGHT/2.5, &(startAnimation->GetCurrentFrame()));
 

@@ -1,5 +1,5 @@
-#ifndef __APPLICATION_CPP__
-#define __APPLICATION_CPP__
+#ifndef __APPLICATION_H__
+#define __APPLICATION_H__
 
 #include<list>
 #include "Globals.h"
@@ -12,7 +12,6 @@ class ModuleInput;
 class ModuleAudio;
 class ModuleFadeToBlack;
 class ModuleCollision;
-class ModuleParticles;
 class Timer;
 
 // Game modules ---
@@ -20,6 +19,8 @@ class ModulePlayer;
 class ModuleScenePreIntro;
 class ModuleSceneIntro;
 class ModuleSceneStage2Platform;
+class ModuleSceneEnding;
+class ModuleSceneGameOver;
 class EntityManager;
 class FxLibrary;
 
@@ -42,13 +43,14 @@ public:
 	ModuleAudio* audio = nullptr;
 	ModuleFadeToBlack* fade = nullptr;
 	ModuleCollision* collision = nullptr;
-	ModuleParticles* particles = nullptr;
 	Timer* timer = nullptr;
 
 	// Game modules ---
 	ModuleScenePreIntro* scene_preintro = nullptr;
 	ModuleSceneIntro* scene_intro = nullptr;
 	ModuleSceneStage2Platform* scene_platform = nullptr;
+	ModuleSceneEnding* scene_ending = nullptr;
+	ModuleSceneGameOver* scene_over = nullptr;
 	EntityManager* manager = nullptr;
 	FxLibrary* fxlib = nullptr;
 
@@ -59,4 +61,4 @@ private:
 
 extern Application* App;
 
-#endif // __APPLICATION_CPP__
+#endif // __APPLICATION_H__

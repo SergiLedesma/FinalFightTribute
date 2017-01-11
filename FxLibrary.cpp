@@ -26,5 +26,11 @@ bool FxLibrary::Start()
 	if (fxPunch4 == 0) {
 		fxPunch4 = App->audio->LoadFx("ff/Audio/sounds/punch004.wav");
 	}
+	if (opening == 0) {
+		opening = App->audio->LoadFx("ff/Audio/sounds/opening.wav");
+	}
+	if (fxBarrel == 0) {
+		fxBarrel = App->audio->LoadFx("ff/Audio/sounds/barrel001.wav");
+	}
 	return true;
 }

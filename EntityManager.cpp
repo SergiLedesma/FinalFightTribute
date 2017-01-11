@@ -1,14 +1,13 @@
+#include <map>
 #include "Application.h"
 #include "EntityManager.h"
 #include "Entity.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Barrel.h"
-#include "Weapon.h"
-#include "Food.h"
-#include "Score.h"
 #include "TrainTrigger.h"
 #include "EnemyTrigger.h"
+#include "EndingTrigger.h"
 
 EntityManager::EntityManager(bool active) : Module(active)
 {
@@ -21,8 +20,8 @@ EntityManager::~EntityManager()
 
 bool EntityManager::Start()
 {
-	for (std::list<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
-		(*it)->Start();
+	for (std::map<Entity*, EntityType>::iterator it = entities.begin(); it != entities.end(); ++it) {
+		(*it).first->Start();
 	}
 	return true;
 }
@@ -30,12 +29,13 @@ bool EntityManager::Start()
 update_status EntityManager::PreUpdate()
 {
 	// Remove all entities scheduled for deletion
-	for (list<Entity*>::iterator it = entityList.begin(); it != entityList.end();)
-	{
-		if ((*it)->to_delete == true)
+	for (std::map<Entity*, EntityType>::iterator it = entities.begin(); it != entities.end(); ) {
+		if ((*it).first->to_delete == true)
 		{
-			RELEASE(*it);
-			it = entityList.erase(it);
+			Entity* entity = (*it).first;
+			entity->CleanUp();
+			RELEASE(entity);
+			it = entities.erase(it);
 		}
 		else
 			++it;
@@ -45,9 +45,9 @@ update_status EntityManager::PreUpdate()
 
 update_status EntityManager::Update()
 {
-	for (std::list<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ) {
-		if (*it != nullptr) {
-			(*it)->Update();
+	for (std::map<Entity*, EntityType>::iterator it = entities.begin(); it != entities.end();) {
+		if ((*it).first != nullptr) {
+			(*it).first->Update();
 			++it;
 		}
 	}
@@ -56,9 +56,12 @@ update_status EntityManager::Update()
 
 bool EntityManager::CleanUp()
 {
-	for (std::list<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
-		RELEASE(*it);
+	for (std::map<Entity*, EntityType>::iterator it = entities.begin(); it != entities.end(); ++it) {
+		Entity* entity = (*it).first;
+		(*it).first->CleanUp();
+		RELEASE(entity);
 	}
+	entities.clear();
 	return true;
 }
 
@@ -76,20 +79,14 @@ Entity * EntityManager::Create(EntityType type)
 	case BARREL:
 		newEntity = new Barrel();
 		break;
-	case TTRIGGER:
+	case TRAINTRIGGER:
 		newEntity = new TrainTrigger();
 		break;
-	case ETRIGGER:
+	case ENEMYTRIGGER:
 		newEntity = new EnemyTrigger();
 		break;
-	case WEAPON:
-		newEntity = new Weapon();
-		break;
-	case FOOD:
-		newEntity = new Food();
-		break;
-	case SCORE:
-		newEntity = new Score();
+	case ENDINGTRIGGER:
+		newEntity = new EndingTrigger();
 		break;
 	default:
 		newEntity = nullptr;
@@ -98,8 +95,18 @@ Entity * EntityManager::Create(EntityType type)
 	}
 	if (newEntity != nullptr) {
 		LOG("Entity created");
-		entityList.push_back(newEntity);
+		entities.insert({ newEntity, type });
 	}
 	newEntity->Start();
 	return newEntity;
+}
+
+int EntityManager::Find(EntityType type) {
+	int retValue = 0;
+	for (std::map<Entity*, EntityType>::iterator it = entities.begin(); it != entities.end(); ++it) {
+		if ((*it).second == type) {
+			retValue++;
+		}
+	}
+	return retValue;
 }

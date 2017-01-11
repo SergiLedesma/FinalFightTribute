@@ -1,5 +1,7 @@
 #include "Destructible.h"
 #include "Application.h"
+#include "ModuleAudio.h"
+#include "FxLibrary.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
@@ -46,6 +48,7 @@ void Destructible::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionT
 	destroyed = true;
 	position.y -= 25;
 	animationDirection = App->scene_platform->player->direction;
+	App->audio->PlayFx(App->fxlib->fxBarrel);
 	collider->to_delete = true;
 	
 }

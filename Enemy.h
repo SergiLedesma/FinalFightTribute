@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __ENEMY_H__
+#define __ENEMY_H__
+
 #include "Creature.h"
 #include "Animation.h"
 #include "ModuleCollision.h"
@@ -42,3 +44,4 @@ private:
 	BehaviourDecision decision = BDIDLE;
 };
 
+#endif // __ENEMY_H__

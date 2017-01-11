@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __CREATURE_H__
+#define __CREATURE_H__
+
 #include "Entity.h"
 
 class Creature :
@@ -28,3 +30,4 @@ protected:
 	int currentHp = 10000;
 };
 
+#endif // __CREATURE_H__

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __PLAYER_H__
+#define __PLAYER_H__
+
 #include <map>
 #include "Creature.h"
 #include "Animation.h"
@@ -35,6 +37,7 @@ public:
 	int speed = 1;
 	int capsuleW = 37;
 	int capsuleH = 87;
+	bool lockCamera = false;
 
 private:
 	int attackDelay = 20;
@@ -42,3 +45,4 @@ private:
 	bool debug = false;
 };
 
+#endif // __PLAYER_H__

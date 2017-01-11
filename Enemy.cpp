@@ -31,9 +31,6 @@ Enemy::Enemy()
 	right.frames.push_back(FrameInfo({ 8, 11, 46, 71 }));
 	right.frames.push_back(FrameInfo({ 58, 9, 39, 72 }));
 	right.frames.push_back(FrameInfo({ 101, 9, 34, 72 }));
-	//right.frames.push_back(FrameInfo({ 164, 100, 26, 88 }));
-	//right.frames.push_back(FrameInfo({ 213, 101, 45, 87 }));
-	//right.frames.push_back(FrameInfo({ 267, 101, 36, 86 }));
 	right.loop = true;
 	right.speed = 0.1f;
 
@@ -79,12 +76,14 @@ bool Enemy::CleanUp()
 
 	App->textures->Unload(graphics);
 
-	RELEASE(Life);
-	RELEASE(currentAnimation);
-	RELEASE(lastMovementAnimation);
-	collider->to_delete = true;
-	attackCollider->to_delete = true;
 	to_delete = true;
+	if (collider != nullptr) {
+		collider->to_delete = true;
+	}
+	if (attackCollider != nullptr) {
+		attackCollider->to_delete = true;
+	}
+	RELEASE(Life);
 
 	return true;
 }
@@ -158,12 +157,6 @@ void Enemy::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType oth
 
 void Enemy::Die() {
 	to_delete = true;
-	if (collider != nullptr) {
-		collider->to_delete = true;
-	}
-	if (attackCollider != nullptr) {
-		attackCollider->to_delete = true;
-	}
 }
 
 void Enemy::BehaviourTree() {
