@@ -143,7 +143,7 @@ void EnemyStateMachine::OnEnter_Moving(State PrevState, const EventData* pData)
 		}
 		break;
 	case UP:
-		if (enemy->position.y - enemy->speed > -App->renderer->camera.y / SCREEN_SIZE + App->scene_platform->walkableSpaceY) {
+		if (enemy->position.y - enemy->speed > - App->renderer->camera.y / SCREEN_SIZE + App->scene_platform->walkableSpaceY + 20) {
 			enemy->position.y -= enemy->speed;
 		}
 		if ((enemy->lastMovementAnimation == &enemy->left) || (enemy->lastMovementAnimation == &enemy->right)) {

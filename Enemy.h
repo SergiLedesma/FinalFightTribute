@@ -34,8 +34,11 @@ public:
 private:
 	int attackDelay = 20;
 	EnemyStateMachine* Life;
-	int maxCooldown = 5;
-	int cooldown = 25;
+	int maxDecisionCooldown = 5;
+	int decisionCooldown = 5;
+	int maxAttackCooldown = 10;
+	int attackCooldown = 10;
+	bool canAttack = false;
 	BehaviourDecision decision = BDIDLE;
 };
 

@@ -15,7 +15,8 @@ enum update_status
 {
 	UPDATE_CONTINUE = 1,
 	UPDATE_STOP,
-	UPDATE_ERROR
+	UPDATE_ERROR,
+	UPDATE_RESTART
 };
 
 // Useful typedefs ---------
@@ -48,7 +49,7 @@ typedef unsigned int uint;
 #define SCREEN_HEIGHT 195//240
 #define FULLSCREEN false
 #define VSYNC true
-#define TITLE "Super Awesome Game"
+#define TITLE "Final Fight Tribute - By: Sergi Ledesma"
 
 // Controls -----------
 #define GORIGHT SDL_SCANCODE_RIGHT

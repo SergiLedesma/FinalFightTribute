@@ -42,6 +42,7 @@ public:
 
 private:
 	std::list<BlitInfo> blitList;
+	FrameInfo* defaultSection = nullptr;
 };
 
 #endif // __MODULERENDER_H__

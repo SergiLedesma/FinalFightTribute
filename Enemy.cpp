@@ -3,12 +3,14 @@
 #include "Player.h"
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleAudio.h"
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleSceneStage2Platform.h"
+#include "FxLibrary.h"
 #include "Timer.h"
 #include "SDL\include\SDL_render.h"
 
@@ -63,7 +65,8 @@ bool Enemy::Start()
 	position.y = 90;
 	maxHp = 1000;
 	currentHp = maxHp;
-	cooldown = maxCooldown;
+	decisionCooldown = maxDecisionCooldown;
+	attackCooldown = maxAttackCooldown;
 	collider = App->collision->AddCollider({ position.x, position.y, 37, 88 }, CENEMY, std::bind(&Enemy::OnCollision, this, std::placeholders::_1, std::placeholders::_2));
 
 	return true;
@@ -83,7 +86,6 @@ bool Enemy::CleanUp()
 	attackCollider->to_delete = true;
 	to_delete = true;
 
-
 	return true;
 }
 
@@ -91,14 +93,14 @@ bool Enemy::CleanUp()
 update_status Enemy::Update()
 {
 	Life->Update();
-	if (cooldown <= 0) {
-		cooldown = maxCooldown;
+	if (decisionCooldown <= 0) {
+		decisionCooldown = maxDecisionCooldown;
 		BehaviourTree();
 	}
 	else {
-		cooldown--;
+		decisionCooldown--;
 	}
-
+	
 	switch (decision) {
 	case (BDGORIGHT) :
 		Life->Move(RIGHT);
@@ -133,17 +135,35 @@ update_status Enemy::Update()
 
 void Enemy::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType) {
 
-	LOG("Collision on enemy");
 	switch (otherType) {
 	case CPLAYER_ATTACK:
 		TakeDamage(10);
+		int punchSound = rand() % 4;
+		switch (punchSound) {
+		case 0:
+			App->audio->PlayFx(App->fxlib->fxPunch1);
+			break;
+		case 1:
+			App->audio->PlayFx(App->fxlib->fxPunch2);
+			break;
+		case 2:
+			App->audio->PlayFx(App->fxlib->fxPunch3);
+			break;
+		case 3:
+			App->audio->PlayFx(App->fxlib->fxPunch4);
+			break;
+		}
 	}
 }
 
 void Enemy::Die() {
 	to_delete = true;
-	collider->to_delete = true;
-	attackCollider->to_delete = true;
+	if (collider != nullptr) {
+		collider->to_delete = true;
+	}
+	if (attackCollider != nullptr) {
+		attackCollider->to_delete = true;
+	}
 }
 
 void Enemy::BehaviourTree() {
@@ -167,12 +187,21 @@ void Enemy::BehaviourTree() {
 		else if (this->position.x > App->scene_platform->player->position.x) {
 			direction = false;
 		}
-		int chance = rand() % 2;
-		if (chance == 0) {
-			decision = BDATTACK;
+		if (attackCooldown <= 0) {
+			canAttack = true;
+			attackCooldown = maxDecisionCooldown;
 		}
 		else {
-			decision = static_cast<BehaviourDecision>(rand() % 5);
+			attackCooldown--;
+		}
+		if (canAttack) {
+			int chance = rand() % 5;
+			if (chance == 0) {
+				decision = BDATTACK;
+			}
+			else {
+				decision = static_cast<BehaviourDecision>(rand() % 5);
+			}
 		}
 	}
 	else {

@@ -61,6 +61,14 @@ int main(int argc, char ** argv)
 				LOG("Application Update exits with error -----");
 				state = MAIN_EXIT;
 			}
+			if (update_return == UPDATE_RESTART) {
+				LOG("Application CleanUp --------------");
+				if (App->CleanUp() == false)
+				{
+					LOG("Application CleanUp exits with error -----");
+				}
+				state = MAIN_CREATION;
+			}
 
 			if (update_return == UPDATE_STOP)
 				state = MAIN_FINISH;

@@ -1,13 +1,14 @@
 #include "Player.h"
 #include "Globals.h"
 #include "Application.h"
+#include "ModuleAudio.h"
 #include "ModuleTextures.h"
 #include "ModuleInput.h"
-#include "ModuleParticles.h"
 #include "ModuleRender.h"
 #include "ModuleCollision.h"
 #include "ModuleFadeToBlack.h"
 #include "ModuleSceneStage2Platform.h"
+#include "FxLibrary.h"
 #include "Timer.h"
 #include "SDL\include\SDL_render.h"
 
@@ -126,12 +127,11 @@ bool Player::CleanUp()
 
 	App->textures->Unload(graphics);
 
+	RELEASE(Life);
 	RELEASE(currentAnimation);
 	RELEASE(lastMovementAnimation);
 	collider->to_delete = true;
 	attackCollider->to_delete = true;
-
-	RELEASE(Life);
 
 	return true;
 }
@@ -144,6 +144,9 @@ update_status Player::Update()
 	LOG("%d", currentHp);
 
 	if (App->input->GetKey(DEBUG) == KEY_DOWN) {
+		if (debug) {
+			App->renderer->camera.x = -position.x * SCREEN_SIZE + App->renderer->camera.w * 1 / 3;
+		}
 		debug = !debug;
 	}
 
@@ -221,10 +224,26 @@ update_status Player::Update()
 
 void Player::OnCollision(std::map<MOVEMENTKEY, bool> direction, CollisionType otherType) {
 
-	LOG("Collision on player");
 	switch (otherType) {
 	case CENEMY_ATTACK:
+		if (!debug) {
 		TakeDamage(1);
+		}
+		int punchSound = rand() % 4;
+		switch (punchSound) {
+		case 0:
+			App->audio->PlayFx(App->fxlib->fxPunch1);
+			break;
+		case 1:
+			App->audio->PlayFx(App->fxlib->fxPunch2);
+			break;
+		case 2:
+			App->audio->PlayFx(App->fxlib->fxPunch3);
+			break;
+		case 3:
+			App->audio->PlayFx(App->fxlib->fxPunch4);
+			break;
+		}
 	}
 }
 
@@ -232,4 +251,5 @@ void Player::Die() {
 	// Game Over -> Restart
 	to_delete = true;
 	collider->to_delete = true;
+	attackCollider->to_delete = true;
 }

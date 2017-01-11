@@ -30,6 +30,7 @@ public:
 	FrameInfo train2;
 	int walkableSpaceY = 55;
 
+	uint trainArrival = 0;
 	bool playTrainAnim = false;
 	int tremorOffset = NULL;
 
@@ -53,6 +54,7 @@ private:
 	Barrel *  barrel1 = nullptr;
 	Barrel *  barrel2 = nullptr;
 	list<Enemy*> enemies;
+
 };
 
 #endif // __MODULESCENESTAGE2PLATFORM_H__

@@ -10,7 +10,10 @@
 #include "Barrel.h"
 #include "Trigger.h"
 #include "Enemy.h"
+#include "Player.h"
+#include "ModuleSceneIntro.h"
 #include "ModuleSceneStage2Platform.h"
+#include "ModuleFadeToBlack.h"
 
 #include "SDL\include\SDL.h"
 #include "SDL_image\include\SDL_image.h"
@@ -48,11 +51,15 @@ bool ModuleSceneStage2Platform::Start()
 
 	graphics = App->textures->Load("ff/sprites/Stage2NoBackground.png");
 
+	if (trainArrival == 0)
+		trainArrival = App->audio->LoadFx("ff/Audio/sounds/train001.wav");
+
 	App->particles->Enable();
 	App->collision->Enable();
-	player = (Player*)App->manager->Create(PLAYER);
 
 	App->audio->PlayMusic("ff/audio/stage2subway.ogg", 1.0f);
+
+	player = (Player*)App->manager->Create(PLAYER);
 
 	trigger = (Trigger *)App->manager->Create(TTRIGGER);
 	trigger->position.x = 350;
@@ -124,6 +131,7 @@ bool ModuleSceneStage2Platform::CleanUp()
 	trigger->to_delete = true;
 	barrel2->to_delete = true;
 	barrel1->to_delete = true;
+	player->to_delete = true;
 	App->textures->Unload(graphics);
 	App->collision->Disable();
 	App->particles->Disable();
@@ -144,6 +152,11 @@ update_status ModuleSceneStage2Platform::Update()
 		if (i == 0) {
 			LOG("YOU WIN");
 		}
+	}
+
+	if (player->to_delete) {
+		LOG("YOU LOSE");
+		return UPDATE_RESTART;
 	}
 	// Move camera forward -----------------------------
 	int scroll_speed = 1;

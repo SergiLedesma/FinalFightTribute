@@ -17,9 +17,11 @@ class Timer;
 
 // Game modules ---
 class ModulePlayer;
+class ModuleScenePreIntro;
 class ModuleSceneIntro;
 class ModuleSceneStage2Platform;
 class EntityManager;
+class FxLibrary;
 
 class Application
 {
@@ -44,9 +46,11 @@ public:
 	Timer* timer = nullptr;
 
 	// Game modules ---
+	ModuleScenePreIntro* scene_preintro = nullptr;
 	ModuleSceneIntro* scene_intro = nullptr;
 	ModuleSceneStage2Platform* scene_platform = nullptr;
 	EntityManager* manager = nullptr;
+	FxLibrary* fxlib = nullptr;
 
 private:
 

@@ -12,6 +12,7 @@ ModuleRender::ModuleRender()
 	camera.x = camera.y = 0;
 	camera.w = SCREEN_WIDTH * SCREEN_SIZE;
 	camera.h = SCREEN_HEIGHT* SCREEN_SIZE;
+	defaultSection = new FrameInfo({ 0, 0, 0, 0 });
 }
 
 // Destructor
@@ -25,14 +26,14 @@ bool ModuleRender::Init()
 	bool ret = true;
 	Uint32 flags = 0;
 
-	if(VSYNC == true)
+	if (VSYNC == true)
 	{
 		flags |= SDL_RENDERER_PRESENTVSYNC;
 	}
 
 	renderer = SDL_CreateRenderer(App->window->window, -1, flags);
-	
-	if(renderer == nullptr)
+
+	if (renderer == nullptr)
 	{
 		LOG("Renderer could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
@@ -50,10 +51,10 @@ update_status ModuleRender::PreUpdate()
 
 // Called every draw update
 update_status ModuleRender::Update()
-{	
+{
 	// Sort queue of elements to blit
-	blitList.sort([](BlitInfo const a, BlitInfo const b) { return a.z < b.z;});
-	
+	blitList.sort([](BlitInfo const a, BlitInfo const b) { return a.z < b.z; });
+
 	// Blit all elements in queue
 	for (std::list<BlitInfo>::iterator it = blitList.begin(); it != blitList.end(); ++it)
 	{
@@ -74,8 +75,10 @@ bool ModuleRender::CleanUp()
 {
 	LOG("Destroying renderer");
 
+	RELEASE(defaultSection);
+
 	//Destroy window
-	if(renderer != nullptr)
+	if (renderer != nullptr)
 	{
 		SDL_DestroyRenderer(renderer);
 	}
@@ -92,6 +95,13 @@ bool ModuleRender::AddBlit(SDL_Texture* texture, int x, int y, const FrameInfo* 
 	currentBlit.y = y;
 	currentBlit.speed = speed;
 	currentBlit.direction = direction;
+	if (section == nullptr) {
+		int w, h;
+		SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+		defaultSection->frame.w = w;
+		defaultSection->frame.h = h;
+		section = defaultSection;
+	}
 	currentBlit.section = section;
 	if (!isBackground) {
 		currentBlit.z = y + section->frame.h;
@@ -112,7 +122,7 @@ bool ModuleRender::Blit(SDL_Texture* texture, int x, int y, const FrameInfo* sec
 	bool ret = true;
 	SDL_Rect rect;
 
-	if(section != nullptr)
+	if (section != nullptr)
 	{
 		rect.w = section->frame.w;
 		rect.h = section->frame.h;

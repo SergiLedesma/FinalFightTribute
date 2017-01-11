@@ -84,6 +84,7 @@
     <ClInclude Include="EntityManager.h" />
     <ClInclude Include="EventData.h" />
     <ClInclude Include="Food.h" />
+    <ClInclude Include="FxLibrary.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="MemLeaks.h" />
@@ -95,6 +96,7 @@
     <ClInclude Include="ModuleParticles.h" />
     <ClInclude Include="ModuleRender.h" />
     <ClInclude Include="ModuleSceneIntro.h" />
+    <ClInclude Include="ModuleScenePreIntro.h" />
     <ClInclude Include="ModuleSceneStage2Platform.h" />
     <ClInclude Include="ModuleTextures.h" />
     <ClInclude Include="ModuleWindow.h" />
@@ -121,6 +123,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="EntityManager.cpp" />
     <ClCompile Include="Food.cpp" />
+    <ClCompile Include="FxLibrary.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -131,6 +134,7 @@
     <ClCompile Include="ModuleParticles.cpp" />
     <ClCompile Include="ModuleRender.cpp" />
     <ClCompile Include="ModuleSceneIntro.cpp" />
+    <ClCompile Include="ModuleScenePreIntro.cpp" />
     <ClCompile Include="ModuleSceneStage2Platform.cpp" />
     <ClCompile Include="ModuleTextures.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />

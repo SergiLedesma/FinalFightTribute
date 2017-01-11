@@ -1,4 +1,6 @@
 #include "Creature.h"
+#include "Application.h"
+#include "ModuleAudio.h"
 
 
 

@@ -8,9 +8,11 @@
 #include "ModuleParticles.h"
 #include "Timer.h"
 
+#include "ModuleScenePreIntro.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleSceneStage2Platform.h"
 #include "EntityManager.h"
+#include "FxLibrary.h"
 #include "Application.h"
 
 using namespace std;
@@ -23,9 +25,11 @@ Application::Application()
 
 	modules.push_back(renderer = new ModuleRender());
 	modules.push_back(textures = new ModuleTextures());
+	modules.push_back(fxlib = new FxLibrary());
 	modules.push_back(audio = new ModuleAudio());
 
 	// Game Modules
+	modules.push_back(scene_preintro = new ModuleScenePreIntro(false));
 	modules.push_back(scene_intro = new ModuleSceneIntro(false));
 	modules.push_back(scene_platform = new ModuleSceneStage2Platform(false));
 	modules.push_back(manager = new EntityManager(true));
@@ -59,7 +63,7 @@ bool Application::Init()
 	timer->Start();
 
 	// Start the first scene --
-	fade->FadeToBlack(scene_intro, nullptr, 3.0f);
+	fade->FadeToBlack(scene_preintro, nullptr, 3.0f);
 
 	return ret;
 }

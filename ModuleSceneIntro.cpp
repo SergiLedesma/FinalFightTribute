@@ -18,13 +18,13 @@ ModuleSceneIntro::ModuleSceneIntro(bool active) : Module(active)
 
 ModuleSceneIntro::~ModuleSceneIntro()
 {
-	delete startAnimation;
+	RELEASE(startAnimation);
 }
 
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	LOG("Loading space intro");
+	LOG("Loading intro scene");
 
 	background = App->textures->Load("ff/Sprites/intro.png");
 	graphics = App->textures->Load("ff/Sprites/start.png");
@@ -41,7 +41,7 @@ bool ModuleSceneIntro::Start()
 // UnLoad assets
 bool ModuleSceneIntro::CleanUp()
 {
-	LOG("Unloading space scene");
+	LOG("Unloading intro scene");
 
 	App->textures->Unload(background);
 	App->textures->Unload(graphics);
@@ -57,7 +57,7 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->AddBlit(background, 0, 0, nullptr, 1, true, true);
 	App->renderer->AddBlit(graphics, SCREEN_WIDTH / 2 - (startAnimation->GetCurrentFrame().frame.w/2), SCREEN_HEIGHT - SCREEN_HEIGHT/2.5, &(startAnimation->GetCurrentFrame()));
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->fade->isFading() == false)
+	if (App->input->GetKey(ATTACK) == KEY_DOWN && App->fade->isFading() == false)
 	{
 		App->fade->FadeToBlack((Module*)App->scene_platform, this, 4.0f);
 		App->audio->PlayMusic("ff/audio/gameStart.ogg", 0.0f);
